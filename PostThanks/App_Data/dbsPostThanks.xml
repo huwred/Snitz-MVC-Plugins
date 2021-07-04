@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Post Thanks Mod" applied="false">
+  <Create>
+    <Table name="FORUM_THANKS">
+      <Column name="MEMBER_ID" type="int" allownulls="false" default="0" />
+      <Column name="TOPIC_ID" type="int" allownulls="false" default="0" />
+      <Column name="REPLY_ID" type="int" allownulls="false" default="0" />
+	  <Index name="PK_Thanks" columns="MEMBER_ID,TOPIC_ID,REPLY_ID" direction="ASC" unique="true" />
+    </Table>
+  </Create>
+  <Alter>
+    <Table name="FORUM_FORUM">
+      <Column action="ADD" name="F_ALLOWTHANKS" type="int" allownulls="false" default="0" />
+    </Table>
+  </Alter>
+</Tables>

@@ -1,0 +1,9 @@
+﻿@using LangResources.Utility
+@model System.Collections.Generic.List<string>
+<ul class="list-unstyled">
+    <li><b>@ResourceManager.GetLocalisedString("Thanked", "Thanks")</b></li>
+    @foreach (var member in Model)
+    {
+        <li>@member</li>
+    }
+</ul>

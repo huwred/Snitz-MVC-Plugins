@@ -1,0 +1,7 @@
+﻿@using LangResources.Utility
+
+@model PostThanks.Models.PostThanksProfile
+<div class="panel panel-thanks">
+    <label>@ResourceManager.GetLocalisedString("lblReceived", "Thanks") <span class="badge badge-success" title="@ResourceManager.GetLocalisedString("lblReceived", "Thanks") @ResourceManager.GetLocalisedString("thanks", "Thanks")" data-toggle="tooltip">@Model.Received</span> @ResourceManager.GetLocalisedString("thanks", "Thanks")</label><br />
+    <label>@ResourceManager.GetLocalisedString("given", "Thanks")<span class="badge badge-primary" title="@ResourceManager.GetLocalisedString("given", "Thanks")" data-toggle="tooltip">@Model.Given</span></label>
+</div>

@@ -1,0 +1,43 @@
+﻿@using LangResources.Utility
+@using PostThanks.Views.Helpers
+@model dynamic
+<div class="panel panel-default">
+    <div class="panel-body">
+        <label>@ResourceManager.GetLocalisedString("ForumSettingTitle", "Thanks")</label>
+        <div class="form-group">
+            <label for="strThanks" class="control-label col-xs-6">
+                <input id="strThanks" type="checkbox" name="strThanks" data-size="mini" data-id="@ViewBag.ForumId" checked="@ViewBag.IsAllowed" />
+                @ResourceManager.GetLocalisedString("ForumSetting", "Thanks")
+            </label>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginScripts())
+{
+    <script>
+        $(document)
+            .ready(function () {
+
+                $('#strThanks').change(function () {
+                    var id = $(this).data('id');
+                    $.ajax(
+                        {
+                            url: SnitzVars.baseUrl + 'PostThanks/ForumSettings/' + id + '?check=' + this.checked,
+                            async: false,
+                            success: function (response) {
+                                //alert('saved');
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                BootstrapDialog.show({
+                                    type: BootstrapDialog.TYPE_WARNING,
+                                    title: textStatus,
+                                    message: errorThrown
+                                });
+                            }
+                        });
+                });
+
+            });
+    </script>
+}
