@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Widgets MOD" applied="false">
+  <Create>
+    <Table name="FORUM_WIDGETS" idfield="W_ID">
+      <Column name="W_NAME" type="varchar" size="50" allownulls="false" />
+      <Column name="W_HTML" type="memo" allownulls="false" />
+      <Index name="IDX_W_NAME" columns="W_NAME" direction="ASC" unique="true" />
+    </Table>
+  </Create>
+</Tables>

@@ -1,0 +1,11 @@
+﻿@model ForumWidgets.Models.ForumWidget
+
+<tr>
+    <td class="col-xs-4">@Html.HiddenFor(m=>m.Id)
+        @Html.TextBoxFor(m=>m.Name,new {@class="form-control"})
+    </td>
+    <td class="col-xs-7">
+        @Html.TextAreaFor(m=>m.HtmlString,new {@class="form-control",rows="4"})
+    </td>
+    <td><i class="fa fa-pencil"></i><i class="fa fa-trash"></i></td>
+</tr>
