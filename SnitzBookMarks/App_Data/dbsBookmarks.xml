@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Bookmarks Mod" applied="false">
+  <Create>
+    <Table name="FORUM_BOOKMARKS" idfield="BOOKMARK_ID">
+      <Column name="B_MEMBERID" type="int" allownulls="false" />
+      <Column name="B_TOPICID" type="int" allownulls="false" />
+    </Table>
+  </Create>
+</Tables>

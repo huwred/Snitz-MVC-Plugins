@@ -1,0 +1,21 @@
+﻿@using BookMarks.Models
+@using BookMarks.Helpers
+
+@model int
+
+@{
+    int bmkId = BookmarkRepository.IsBookmarked(Model);
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString();
+    var action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString();
+}
+@if (action != "Search")
+{
+ if (bmkId > 0)
+ {
+     @Html.ActionLinkConfirm(@LangResources.Utility.ResourceManager.GetLocalisedString("tipRemoveBookmark", "toolTip"), "Delete", "Bookmark", new {id = bmkId}, "fa fa-bookmark fa-1_5x")
+ }
+ else
+ {
+     @Html.ActionLink(" ", "Add", "Bookmark", new {id = Model, returnurl = Request.RawUrl}, new {@class = "fa fa-bookmark-o fa-1_5x", title = @LangResources.Utility.ResourceManager.GetLocalisedString("tipBookmarkPost", "toolTip"), data_toggle = "tooltip"})
+ }
+}

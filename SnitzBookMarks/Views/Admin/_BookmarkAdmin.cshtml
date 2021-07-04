@@ -1,0 +1,11 @@
+﻿@using LangResources.Utility
+@using SnitzConfig
+
+<div class="form-group">
+    <label for="strBookmark" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("bmTitle","Bookmarks"):</label>
+    <div class="col-xs-4">
+        <input class="yesno-checkbox" id="strBookmark" type="checkbox" name="strBookmarks" data-size="mini" checked="@(ClassicConfig.GetValue("STRBOOKMARK") == "1")"  />
+    </div>
+    <div class="col-xs-4">
+    </div>
+</div>

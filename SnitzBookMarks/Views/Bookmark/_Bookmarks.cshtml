@@ -1,0 +1,54 @@
+﻿@using SnitzCore.Extensions
+@using BbCodeFormatter
+@using LangResources.Utility
+@using SnitzDataModel.Extensions;
+
+
+@model BookMarks.Models.BookmarkViewModel
+
+<div class="container-fluid">
+    @using (Html.BeginForm("Index", "Bookmark", new {userid=Model.UserId, pagenum = 1, readcookie = false }, FormMethod.Get))
+    {   
+        <div class="col-xs-5 col-sm-6 padding-sm">
+            @Html.EnumDropDownListFor(m => m.ActiveSince, new { onchange = "$(this).closest('form').submit();", @class = "form-control" },((DateTime)ViewData["LastVisitDateTime"]).ToFormattedString())
+        </div>
+        <div class="col-xs-7 col-sm-6 padding-sm">  
+            @Html.EnumDropDownListFor(m => m.Refresh, new { onchange = "$(this).closest('form').submit();", @class = "form-control" },"")
+        </div>
+        <input type="hidden" value="1" id="pagenum" name="pagenum"/>
+        <input type="hidden" value="false" id="readcookie" name="readcookie"/>
+    }
+</div>
+<div class="row-fluid clearfix">
+    <div class="pull-left">@Html.Partial("_BookmarkPager", Model)</div>
+</div> 
+@using(Html.BeginForm("Delete","Bookmark",new{returnUrl=this.Request.RawUrl})){
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>@ResourceManager.GetLocalisedString("lblForum","labels") </th>
+            <th>@ResourceManager.GetLocalisedString("lblTopic","labels")</th>
+            <th>@ResourceManager.GetLocalisedString("Started", "BookMarks")</th>
+            <th>@ResourceManager.GetLocalisedString("lblLastPost","labels")</th>
+            <th><input type="checkbox" id="checkAll" value="1" title="@ResourceManager.GetLocalisedString("tipCheckAll","Tooltip")" data-toggle="tooltip"/> 
+            <button id="delete_button" class="btn btn-xs btn-primary" title="@ResourceManager.GetLocalisedString("tipDeleteSelected","Tooltip")" data-toggle="tooltip"><i class="fa fa-trash-o fa-1_5x"></i></button>
+            </th>
+        </tr>
+
+    </thead>
+  <tbody>
+@foreach (var bookmark in Model.Bookmarks)
+{
+    <tr>
+        <td>@Html.ActionLink(bookmark.Forum.Subject,"Posts","Forum",new{id=bookmark.Forum.Id,pagenum=1},null)</td>
+        <td><a href="@Url.Action("Posts", "Topic", new {id = bookmark.TopicId, pagenum = -1})">@Html.Raw(BbCodeProcessor.Format(bookmark.Topic.Subject))</a></td>
+        <td>@bookmark.Topic.Date.Value.ToFormattedString() by @Html.ActionLink(bookmark.Author.Username, "UserProfile", "Account", new { id = bookmark.Author.Id }, new { title = ResourceManager.GetLocalisedString("tipViewProfile","Tooltip"), data_toggle = "tooltip" })</td>
+        <td><a href="@Url.Action("Posts", "Topic", new {id = bookmark.TopicId, pagenum = -1,archived = bookmark.Topic.Archived})#@bookmark.Topic.LastPostReplyId" data-toggle="tooltip" title="@ResourceManager.GetLocalisedString("tipLastPost","Tooltip") ">@bookmark.Topic.LastPostDate.Value.ToFormattedString()</a> by @Html.ActionLink(bookmark.Topic.EditedBy, "UserProfile", "Account", new { id = bookmark.Topic.LastPostAuthorId }, new { title = ResourceManager.GetLocalisedString("tipViewProfile","Tooltip"), data_toggle = "tooltip" })</td>
+        <td><input type="checkbox" name="delete-me" value="@bookmark.Id"/></td>
+    </tr>    
+
+}
+  </tbody>
+</table>
+}

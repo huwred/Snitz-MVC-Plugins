@@ -1,0 +1,41 @@
+﻿@using LangResources.Utility
+@model BookMarks.Models.BookmarkViewModel
+
+@{
+    ViewBag.Title = @ResourceManager.GetLocalisedString("IndexTitle","BookMarks");
+    ViewBag.PageTitle = @ResourceManager.GetLocalisedString("IndexPageTitle", "BookMarks");
+}
+@section sidebox
+{
+    <div class="side-box">
+    </div>
+}
+<h5>@ViewBag.Title</h5>
+<hr class="title"/>
+@Html.Partial("_Bookmarks")
+
+@section scripts
+{
+    <script type="text/javascript">
+       
+        $(document).on('click', '#delete_button', function (e) {
+            e.preventDefault();
+            var delForm = $(this).closest('form');
+            BootstrapDialog.confirm({
+                title: '@ResourceManager.GetLocalisedString("DeleteBookmarks","Bookmarks")',
+                message: '<label>@ResourceManager.GetLocalisedString("DeleteConfirm", "BookMarks")</label><br/>', callback: function (ok) {
+                    if (ok) delForm.submit();
+                }
+            });
+
+        });
+        $('#checkAll').change(function () {
+            var table = $(this).closest('table');
+            $('td input:checkbox', table).prop('checked', this.checked);
+        });
+        var refresh = '@ViewBag.RefreshSeconds';
+
+        if (refresh > 0)
+            setTimeout("window.location.reload();", /* time you want to refresh in milliseconds */ refresh);
+    </script>
+}

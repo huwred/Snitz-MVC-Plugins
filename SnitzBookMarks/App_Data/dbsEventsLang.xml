@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Event language strings" applied="false">
+  <Insert>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="mnuEvents" />
+      <Column name="Value" type="varchar" value="Events" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Menu" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calTitle" />
+      <Column name="Value" type="varchar" value="Events" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calShowBDays" />
+      <Column name="Value" type="varchar" value="Show Birthdays" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_Weekend" />
+      <Column name="Value" type="varchar" value="Every weekend" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_None" />
+      <Column name="Value" value="None" />
+      <Column name="Culture" value="en" />
+      <Column name="Type" value="string" />
+      <Column name="ResourceSet" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_EveryYear" />
+      <Column name="Value" type="varchar" value="Every year" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_EveryWeek" />
+      <Column name="Value" type="varchar" value="Every week" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_EveryOtherWeek" />
+      <Column name="Value" type="varchar" value="Every other week" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_EveryOtherDay" />
+      <Column name="Value" type="varchar" value="Every other day" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_EveryMonth" />
+      <Column name="Value" type="varchar" value="Every month" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalRecur_EveryDay" />
+      <Column name="Value" type="varchar" value="Every day" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calMaxRecords" />
+      <Column name="Value" type="varchar" value="Maximum recurring events" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calFirstDayofWeek" />
+      <Column name="Value" type="varchar" value="First day of week" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calDelThis" />
+      <Column name="Value" type="varchar" value="This date only" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calDelFuture" />
+      <Column name="Value" type="varchar" value="All future dates" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calDeleteOptions" />
+      <Column name="Value" type="varchar" value="Delete Options" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calDelAll" />
+      <Column name="Value" type="varchar" value="All dates" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="calAllowed" />
+      <Column name="Value" type="varchar" value="Who can post events" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="Events" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Wed" />
+      <Column name="Value" type="varchar" value="Wednesday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Tues" />
+      <Column name="Value" type="varchar" value="Tuesday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Thur" />
+      <Column name="Value" type="varchar" value="Thursday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Sun" />
+      <Column name="Value" type="varchar" value="Sunday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Sat" />
+      <Column name="Value" type="varchar" value="Saturday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Mon" />
+      <Column name="Value" type="varchar" value="Monday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalDays_Fri" />
+      <Column name="Value" type="varchar" value="Friday" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalAllowed_None" />
+      <Column name="Value" type="varchar" value="Nobody" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalAllowed_Members" />
+      <Column name="Value" type="varchar" value="All Members" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalAllowed_AdminsModerators" />
+      <Column name="Value" type="varchar" value="Administrators and Moderators" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+    <Table name="LANGUAGE_RES">
+      <Column name="ResourceId" type="varchar" value="CalAllowed_Admins" />
+      <Column name="Value" type="varchar" value="Administrators" />
+      <Column name="Culture" type="varchar" value="en" />
+      <Column name="Type" type="varchar" value="string" />
+      <Column name="ResourceSet" type="varchar" value="EnumDescriptions" />
+    </Table>
+  </Insert>
+</Tables>
