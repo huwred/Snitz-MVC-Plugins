@@ -1,20 +1,20 @@
 # Snitz-MVC-Plugins
 Plugins for Snitz 2000 MVC
 
-## ForumWidgets
+## [Widgets](../../tree/main/ForumWidgets)
 
-## [PhotoAlbum](../../tree/main/ForumWidgets)
-
+## [Album](../../tree/main/PhotoAlbum)
 Member photo album 
 
-## MemberFields
+## [Member Fields](../../tree/main/MemberFields)
 
-## PostThanks
+## [Thanks](../../tree/main/PostThanks)
 
-## SiteManager
+## [Mamage Site](../../tree/main/SiteManager)
+An admin plugin to manage files and for MSSQL a basic Database management interface.
 
-## SnitzBookMarks
+## [Bookmarks](../../tree/main/SnitzBookmarks)
 
-## SnitzEvents
+## [Calendar](../../tree/main/SnitzEvents)
 
 
