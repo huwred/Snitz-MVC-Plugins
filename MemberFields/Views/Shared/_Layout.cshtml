@@ -1,0 +1,173 @@
+﻿@using SnitzConfig
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/bootstrap-theme.min.css")
+    @Styles.Render("~/Content/snitz.min.css")
+    
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/oldIEBrowsersSupport")
+    <![endif]-->
+    @RenderSection("styles", required: false)
+</head>
+<body>
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="navbar-brand form-inline"><a href="@Config.ForumUrl" data-toggle="tooltip" data-placement="bottom" title="@Html.Raw(Config.ForumTitle??ClassicConfig.ForumTitle)"></a></span>
+            
+            </div>
+            <div class="collapse navbar-collapse">
+                @if (Session["SnitzMenu"] == null)
+                {
+                    Session["SnitzMenu"] = Html.Partial("~/Views/Shared/_Menu.cshtml");
+                }
+                @Session["SnitzMenu"]
+                @Html.Partial("_LoginPartial")
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
+
+
+    <!-- Begin page content -->
+
+    <div class="container-fluid">
+        @if (IsSectionDefined("breadcrumb"))
+        {
+            <div class="breadcrumb">
+                @RenderSection("breadcrumb", required: false)
+            </div>
+        }
+        
+        <div class="row-fluid">
+            <noscript>
+                <div class="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Warning!</strong> Please enable JavaScript in your browser!
+                </div>
+            </noscript>
+            <div class="col-xs-12 col-md-8 padding-xs" id="main-content">
+                @if (IsSectionDefined("featured"))
+                {
+                    <div class="featured">
+                        @RenderSection("featured", required: false)
+                    </div>
+                }
+                @if (IsSectionDefined("topicsearchbox"))
+                {
+                    <div class="side-box hidden-sm hidden-md hidden-lg">
+                        @RenderSection("topicsearchbox", required: false)
+                    </div>
+                }                
+                @RenderBody()
+            </div>
+            <div class="col-xs-12 col-md-4" id="side-content">
+                @if (IsSectionDefined("sidebox"))
+                {
+                <div class="side-box">
+                    @RenderSection("sidebox", required: false)
+                </div>
+                }
+            </div>
+        </div>
+       
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted text-right">&copy; @Html.Raw(ClassicConfig.Copyright)</p>
+            <p class="text-muted text-center small">powered by: <a href="http://forum.snitz.com/mvc" title="powered by Snitz Forums MVC" >Snitz Forums MVC</a> &copy; 2016 </p>
+        </div>
+    </footer>
+    
+
+    <script>
+        /*lets set some global forum js variables*/
+        var baseUrl = "@Url.Content("~")";
+        var isUserAuthenticated = '@User.Identity.IsAuthenticated';
+        var forumTitle = '@(Config.ForumTitle ?? ClassicConfig.ForumTitle)';
+        var forumUrl = '@(Config.ForumUrl ?? ClassicConfig.ForumUrl)';
+        var forumDesc = '@Config.ForumDescription';
+
+    </script>
+    @Scripts.Render("~/Scripts/jquery-2.1.4.min.js")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/bootstrapjs")
+    @Scripts.Render("~/Scripts/jquery.timeago.min.js")
+    @Scripts.Render("~/Scripts/snitz.jquery.min.js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            /*update the session topiclist if checkbox selected*/
+            $('.topic-select').on('mouseup', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateTopicList", "Topic")",
+                    data: { topicid: $(this).val() },
+                    cache: false
+                });
+            });
+            /*update the session replylist if checkbox selected*/
+            $('.reply-select').on('mouseup', function () {
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateReplyList", "Reply")",
+                    data: { replyid: $(this).val() },
+                    cache: false
+                });
+            });
+            /*updates the lastactivity date for members*/
+
+            if (isUserAuthenticated === 'True') {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UpdateLastActivityDate", "Account")",
+                    data: { userName: '@User.Identity.Name' },
+                    cache: false
+                });
+            }
+            /*show popup error message*/
+            var errMsg = "@ViewBag.ErrTitle";
+            if (errMsg.length > 1) {
+
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_WARNING,
+                    title: '@ViewBag.ErrTitle',
+                    message: "@Html.Raw(ViewBag.Error)"
+                });
+            }
+            /*remove the sidebox if it's empty*/
+            if ($('.side-box').is(':empty') || $.trim($('.side-box').html()).length == 0) {
+                $('#side-content').remove();
+                $('#main-content').removeClass('col-sm-7');
+                $('#main-content').removeClass('col-md-8');
+                $('#main-content').addClass('col-md-11');
+            }
+        });
+
+    </script>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,105 @@
+﻿@using LangResources.Utility
+@model MemberFields.Models.ExtendedProfile
+@{
+    var fieldName = ResourceManager.GetLocalisedString("usrFieldName", "ExtProfile");
+    var fieldType = ResourceManager.GetLocalisedString("usrFieldType", "ExtProfile");
+}
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times; </button>
+    <h4 class="modal-title">@ResourceManager.GetLocalisedString("usrEditTitle", "ExtProfile")</h4>
+</div>
+<div class="modal-body" style="min-width: 360px;">
+    <section id="field-create-box">
+        @using (Ajax.BeginForm("FieldCreateEdit", "MemberFields",
+            new AjaxOptions() { HttpMethod = "POST", OnSuccess = "fieldSuccess" },
+            new { enctype = "multipart/form-data", id = "create-field-form" }))
+        {
+            @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.Id)
+
+            <div class="form-group">
+                <label class="control-label col-md-4">@fieldName</label>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.FieldName, new { htmlAttributes = new { @class = "form-control field-name" } })
+                    @Html.ValidationMessageFor(model => model.FieldName, "", new { @class = "text-danger" })
+                    <span class="field-name-err" style="display:none;">Invalid character</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Description</label>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control", rows = 4 } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">@fieldType</label>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.FieldType, new { htmlAttributes = new { @class = "form-control", rows = 4 } })
+                    @Html.ValidationMessageFor(model => model.FieldType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group" id="options-create-box">
+                <label class="control-label col-md-4">Options for Select Items seperate with |</label>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.OptionsString, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Default Value</label>
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.DefaultValue, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DefaultValue, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Optional</label>
+                <div class="col-md-8">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="Optional" value="1" @(Model.Optional == 1 ? Html.Raw("checked") : Html.Raw(""))> 
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-4">Private</label>
+                <div class="col-md-8">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="Private" value="1" @(Model.Private == 1 ? Html.Raw("checked") : Html.Raw(""))> 
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        }
+    </section>
+
+</div>
+<div class="modal-footer">
+    @*<button class="btn btn-default" onclick=" saveProfileField() ">Save</button>*@
+    <div class="form-group">
+        <div class="col-md-offset-3 col-md-9">
+            <input type="button" value="Cancel" class="btn btn-sm btn-primary cancel" data-dismiss="modal" />
+            <input type="reset" value="Reset" class="btn btn-sm btn-warning " />
+            <input type="button" value="Save" class="btn btn-sm btn-success" onclick=" saveProfileField() "/>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document)
+        .ready(function() {
+            if ($(".field-type-select").length > 0) {
+                if ($("#FieldType").val() === "O" || $("#FieldType").val() === "M" || $("#FieldType").val() === "H" || $("#FieldType").val() === "V") {
+                    $("#options-create-box").show();
+                } else {
+                    $("#options-create-box").hide();
+                }
+            }
+        });
+</script>

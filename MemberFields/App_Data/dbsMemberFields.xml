@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Tables title="Member Profile Extension Plugin" applied="false">
+  <Create>
+    <Table name="FORUM_USERFIELDS" idfield="USR_FIELD_ID">
+      <Column name="USR_DESC" type="nvarchar" size="512" allownulls="false"/>
+      <Column name="USR_FIELDTYPE" type="varchar" size="1" allownulls="false" />
+      <Column name="USR_DEFAULT" type="nvarchar" size="100" allownulls="true"/>
+      <Column name="USR_OPTIONAL" type="smallint" allownulls="false" default="1"/>
+      <Column name="USR_PRIVATE" type="smallint" allownulls="false" default="0"/>
+      <Column name="USR_SHORTNAME" type="nvarchar" size="20" allownulls="true" />
+      <Column name="USR_VALUES" type="nvarchar" size="1000" allownulls="true"/>    
+    </Table>  
+    <Table name="FORUM_MEMBERFIELDS">
+      <Column name="MEMBER_ID" type="int" allownulls="false" />
+      <Column name="USR_FIELD_ID" type="int" allownulls="false" />
+      <Column name="USR_VALUE" type="nvarchar" size="100" allownulls="false"/>
+      <Index name="PK_ExtendedProfile" columns="MEMBER_ID,USR_FIELD_ID" direction="ASC" unique="true" />
+    </Table>    
+  </Create>
+  <Insert>
+    <Table name="FORUM_USERFIELDS">
+      <Column name="USR_SHORTNAME" type="varchar" value="TimeZone" />
+      <Column name="USR_DESC" type="varchar" value="Your TimeZone " />
+      <Column name="USR_FIELDTYPE" type="varchar" value="S" />
+      <Column name="USR_OPTIONAL" type="int" value="1" />
+      <Column name="USR_PRIVATE" type="int" value="0" />
+    </Table>
+  </Insert>
+</Tables>

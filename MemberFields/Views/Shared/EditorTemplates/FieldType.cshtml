@@ -1,0 +1,50 @@
+﻿
+@model string
+@{
+// S = Simple Input
+// N = Number Input
+// T = Text Area
+// C = Check Box
+// D = Date
+// X = Time
+// Z = DateTime
+// O = Select Box
+// M = Multi-Select Box
+// H = Horizontal Radio Buttons
+// V = Vertical Radio Buttons
+}
+<select name="FieldType" id="FieldType" class="form-control field-type-select">
+    <option value="S" @if (Model == "S") { @Html.Raw("selected") }>
+        Simple Input
+    </option>
+    <option value="T" @if (Model == "T") { @Html.Raw("selected") }>
+        Text Box
+    </option>
+    <option value="N" @if (Model == "N") { @Html.Raw("selected") }>
+        Number
+    </option>
+    <option value="C" @if (Model == "C") { @Html.Raw("selected") }>
+        True/False
+    </option>
+    <option value="D" @if (Model == "D") { @Html.Raw("selected") }>
+        Date
+    </option>
+    <option value="X" @if (Model == "X") { @Html.Raw("selected") }>
+        Time
+    </option>
+    <option value="Z" @if (Model == "Z") { @Html.Raw("selected") }>
+        DateTime
+    </option>
+    <option value="O" @if (Model == "O") { @Html.Raw("selected") }>
+        Select Box
+    </option>
+    <option value="M" @if (Model == "M") { @Html.Raw("selected") }>
+        Select Many
+    </option>
+    <option value="H" @if (Model == "H") { @Html.Raw("selected") }>
+        Radio Buttons (Horizontal)
+    </option>
+    <option value="V" @if (Model == "V") { @Html.Raw("selected") }>
+        Radio Buttons (Vertical)
+    </option>
+</select>

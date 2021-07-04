@@ -1,0 +1,21 @@
+﻿@using LangResources.Utility
+@using MemberFields.Models
+@model MemberProfile
+@{
+    var displayVal = Model.PropertyValue;
+    var fieldName = ResourceManager.GetLocalisedString("usr" + Model.PropertyName, "ExtProfile"); 
+    if (Model.PropertyName == "TimeZone")
+    {
+        DateTime usertime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, Model.PropertyValue);
+        displayVal = usertime.ToString("HH:mm");
+        fieldName = ResourceManager.GetLocalisedString("usrLocalTime","labels");
+    }
+}
+<div class="form-group">
+    <div class="col-xs-4">
+        <label>@fieldName</label>
+    </div>
+    <div class="col-xs-8">
+        @displayVal
+    </div>
+</div>

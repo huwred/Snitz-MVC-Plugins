@@ -1,0 +1,247 @@
+﻿
+@using LangResources.Utility
+@using MemberFields.Models
+@using System.Collections.ObjectModel
+@using WebSecurity = SnitzMembership.WebSecurity
+
+@model IEnumerable<MemberProfile>
+@{
+    var requiredString = "data-val='true' data-val-required='" + ResourceManager.GetLocalisedString("PropertyRequired","ErrorMessage") + "'";
+}
+    @foreach (MemberProfile item in Model)
+    {
+        var fieldName = ResourceManager.GetLocalisedString("usr" + item.PropertyName, "ExtProfile");
+        if (item.PropertyName != "TimeZone")
+        {
+
+            <div id="@item.PropertyName">
+                @if (item.PropertyType == "S")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input @if (item.Optional == 0)
+                                       {
+                                           @String.Format(requiredString, item.PropertyName)
+                                       } type="text" class="form-control" id="input_@item.PropertyName" name="@item.PropertyName" value="@item.PropertyValue" data-user="@WebSecurity.CurrentUserId"/>
+                                <span class="input-group-btn"><button type="button" class="btn btn-primary profile-text" data-control="@item.PropertyName"><i class="fa fa-check"></i></button></span>
+                            </div>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+
+                }
+                else if (item.PropertyType == "T")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <textarea @if (item.Optional == 0)
+                                          {
+                                              @String.Format(requiredString, item.PropertyName)
+                                          } class="form-control" rows="4" id="input_@item.PropertyName" name="@item.PropertyName" data-user="@WebSecurity.CurrentUserId">@item.PropertyValue</textarea>
+                                <span class="input-group-btn"><button type="button" class="btn btn-primary profile-text" data-control="@item.PropertyName"><i class="fa fa-check"></i></button></span>
+                            </div>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+
+                }
+                else if (item.PropertyType == "N")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <input @if (item.Optional == 0)
+                                   {
+                                       @String.Format(requiredString, item.PropertyName)
+                                   } type="number" id="input_@item.PropertyName" name="input_@item.PropertyName" class="form-control inline numberinput" value="@item.PropertyValue" style="width: 120px;" data-user="@WebSecurity.CurrentUserId"/>
+                            <span class="form-inline"><button type="button" class="btn btn-primary profile-text" data-control="@item.PropertyName"><i class="fa fa-check"></i></button></span>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "Z")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input @if (item.Optional == 0)
+                                       {
+                                           @String.Format(requiredString, item.PropertyName)
+                                       } type="text" class="form-control datetime" id="input_@item.PropertyName" name="@item.PropertyName" value="@item.PropertyValue" data-user="@WebSecurity.CurrentUserId"/>
+                                <span class="input-group-btn"><button type="button" class="btn btn-primary profile-text" data-control="@item.PropertyName"><i class="fa fa-check"></i></button></span>
+                            </div>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "D")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input @if (item.Optional == 0)
+                                       {
+                                           @String.Format(requiredString, item.PropertyName)
+                                       } type="text" class="form-control date" id="input_@item.PropertyName" name="@item.PropertyName" value="@item.PropertyValue" data-user="@WebSecurity.CurrentUserId"/>
+                                <span class="input-group-btn"><button type="button" class="btn btn-primary profile-text" data-control="@item.PropertyName"><i class="fa fa-check"></i></button></span>
+                            </div>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "X")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <div class="input-group">
+                                <input @if (item.Optional == 0)
+                                       {
+                                           @String.Format(requiredString, item.PropertyName)
+                                       } type="text" class="form-control time" id="input_@item.PropertyName" name="@item.PropertyName" value="@item.PropertyValue" data-user="@WebSecurity.CurrentUserId"/>
+                                <span class="input-group-btn"><button type="button" class="btn btn-primary profile-text" data-control="@item.PropertyName"><i class="fa fa-check"></i></button></span>
+                            </div>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+
+                    </div>
+                }
+                else if (item.PropertyType == "C")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right"></label>
+                        <div class="col-sm-7">
+                            <div class="checkbox">
+                                <label>
+                                    <input @if (item.Optional == 0)
+                                           {
+                                               @String.Format(requiredString, item.PropertyName)
+                                           } id="input_@item.PropertyName" type="checkbox" class="profile-check" value="1" data-user="@WebSecurity.CurrentUserId" name="@item.PropertyName" @(item.PropertyValue == "1" ? Html.Raw("checked") : Html.Raw(""))> @fieldName
+                                </label>
+                            </div>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "O")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <select @if (item.Optional == 0)
+                                    {
+                                        @String.Format(requiredString, item.PropertyName)
+                                    } class="form-control profile-select" id="input_@item.PropertyName" name="@item.PropertyName" data-user="@WebSecurity.CurrentUserId">
+                                @foreach (var prop in item.PropertyOptions)
+                                {
+                                    <option value="@prop" @if (item.PropertyValue == prop)
+                                                          {
+                                                              @Html.Raw("selected")
+                                                          }>
+                                        @prop
+                                    </option>
+                                }
+                            </select>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "M")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            <select @if (item.Optional == 0)
+                                    {
+                                        @String.Format(requiredString, item.PropertyName)
+                                    } class="form-control profile-selectmulti" id="input_@item.PropertyName" name="@item.PropertyName" data-user="@WebSecurity.CurrentUserId" multiple>
+                                @foreach (var prop in item.PropertyOptions)
+                                {
+                                    <option value="@prop" @if (item.PropertyValue.Contains(prop + "|"))
+                                                          {
+                                                              @Html.Raw("selected")
+                                                          }>
+                                        @prop
+                                    </option>
+                                }
+                            </select>
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "H")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            @foreach (var prop in item.PropertyOptions)
+                            {
+                                <label class="radio-inline">
+                                    <input class="profile-radio" type="radio" name="@item.PropertyName" id="input_@item.PropertyName" value="@prop" data-user="@WebSecurity.CurrentUserId" @if (item.PropertyValue == prop)
+                                                                                                                                                                                           {
+                                                                                                                                                                                               @Html.Raw("checked")
+                                                                                                                                                                                           }/>@prop
+                                </label>
+                                @Html.Raw("&nbsp;")
+                            }
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+                else if (item.PropertyType == "V")
+                {
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                        <div class="col-sm-7">
+                            @foreach (var prop in item.PropertyOptions)
+                            {
+                                <label class="radio">
+                                    <input type="radio" class="profile-radio" name="@item.PropertyName" id="input_@item.PropertyName" value="@prop" data-user="@WebSecurity.CurrentUserId" class="" @if (item.PropertyValue == prop)
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        @Html.Raw("checked")
+                                                                                                                                                                                                    }/>@prop
+                                </label>
+                            }
+                            @Html.ValidationMessage(item.PropertyName)
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div id="@item.PropertyName">
+                <div class="form-group">
+                    <label class="control-label col-sm-4 flip text-right">@fieldName</label>
+                    <div class="col-sm-7">
+                        <select class="form-control inline profile-tzselect" name="@item.PropertyName" id="@item.PropertyName" data-user="@WebSecurity.CurrentUserId">
+                            @{
+                                string forumTimeZoneId = item.PropertyValue;
+
+                                ReadOnlyCollection<TimeZoneInfo> timeZones = TimeZoneInfo.GetSystemTimeZones();
+
+                                foreach (TimeZoneInfo timeZoneInfo in timeZones)
+                                {
+                                    if (forumTimeZoneId == timeZoneInfo.Id)
+                                    {
+                                        <option value="@timeZoneInfo.Id" selected>@timeZoneInfo.DisplayName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@timeZoneInfo.Id">@timeZoneInfo.DisplayName</option>
+                                    }
+
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>                
+            </div>
+        }
+    }

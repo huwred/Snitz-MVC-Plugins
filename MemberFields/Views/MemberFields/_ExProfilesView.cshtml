@@ -1,0 +1,63 @@
+﻿
+@using BbCodeFormatter
+@using SnitzDataModel.Extensions;
+@using LangResources.Utility
+@using MemberFields.Models
+
+@using WebSecurity = SnitzMembership.WebSecurity
+
+@model IEnumerable<MemberProfile>
+
+@foreach (MemberProfile item in Model)
+{
+    var displayVal = item.PropertyValue;
+    var fieldName = ResourceManager.GetLocalisedString("usr" + item.PropertyName, "ExtProfile");
+    if (item.Private == 0)
+    {
+        <div class="form-group">
+            <div class="col-xs-4">
+                <label>@fieldName</label>
+            </div>
+            <div class="col-xs-8">
+                @if (item.PropertyType == "T")
+                {
+                    @Html.Raw(BbCodeProcessor.Format(displayVal, true, true))
+                }
+                else if (item.PropertyType == "M")
+                {
+                    @Html.Raw(BbCodeProcessor.Format(displayVal.Replace("|", "\n"), true, true))
+                }
+                else
+                {
+                    @displayVal
+                }
+            </div>
+
+        </div>
+    }
+    else if (item.MemberId == WebSecurity.CurrentUserId || User.IsAdministrator())
+    {
+        <div class="form-group private">
+            <div class="col-xs-4">
+                <label>@fieldName</label>
+            </div>
+            <div class="col-xs-8">
+                @if (item.PropertyType == "T")
+                {
+                    @Html.Raw(BbCodeProcessor.Format(displayVal, true, true))
+                }
+                else if (item.PropertyType == "M")
+                {
+                    @Html.Raw(BbCodeProcessor.Format(displayVal.Replace("|", "\n"), true, true))
+                }
+                else
+                {
+                    @displayVal
+                }
+            </div>
+
+        </div>
+    }
+
+}
+

@@ -1,0 +1,53 @@
+﻿@using LangResources.Utility
+@using SnitzCore.Extensions;
+@using SnitzDataModel.Extensions
+
+@model IEnumerable<MemberFields.Models.ExtendedProfile>
+
+@{
+    ViewBag.Title = "Extended Profile";
+}
+
+<h4>Extended Profile Admin</h4>
+<p>
+    @*@Html.ActionLink("Add Field", "FieldCreate", null, new { @class = "modal-link" })*@
+    @Html.ActionLink(" ", "FieldCreate", "MemberFields", null, new { @class = "modal-link fa fa-1_5x fa-wpforms", title = ResourceManager.GetLocalisedString("newField", "ExtProfile"), data_toggle = "tooltip" })
+
+</p>
+<table class="table table-bordered table-condensed">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FieldName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FieldType)
+        </th>
+        <th>@Html.DisplayNameFor(model => model.OptionsString)</th>
+        <th>@Html.DisplayNameFor(model => model.Optional)</th>
+        <th>@Html.DisplayNameFor(model => model.Private)</th>
+        <th></th>
+
+    </tr>
+
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FieldName)
+        </td>
+        <td>
+            @ResourceManager.GetLocalisedString("fldType" + item.FieldType, "ExtProfile")
+            @*@Html.DisplayFor(modelItem => item.FieldType)*@
+        </td>
+        <td>@Html.DisplayFor(modelItem => item.OptionsString)</td>
+        <td>@Html.DisplayFor(modelItem => item.Optional)</td>
+        <td>@Html.DisplayFor(modelItem => item.Private)</td>
+        <td class="flip text-right">
+            @Html.ActionLink(" ", "FieldEdit", new { id = item.Id }, new { @class = "modal-link fa fa-edit fa-1_5x",data_title="Edit Field",data_toggle="tooltip" })
+            @*@Html.ActionLink("Delete", "FieldDelete", new { id = item.Id })*@
+            @Html.ActionLinkConfirm(ResourceManager.GetLocalisedString("cnfDeleteField", "ExtProfile"), "FieldDelete", "MemberFields", new { id = item.Id, data_title = "Delete Field", data_toggle = "tooltip" }, "fa fa-trash-o fa-1_5x")
+        </td>
+    </tr>
+    }
+
+</table>
