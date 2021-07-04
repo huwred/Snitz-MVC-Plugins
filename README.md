@@ -3,7 +3,7 @@ Plugins for Snitz 2000 MVC
 
 ## ForumWidgets
 
-## [PhotoAlbum](tree/main/ForumWidgets)
+## [PhotoAlbum](../tree/main/ForumWidgets)
 
 Member photo album 
 
