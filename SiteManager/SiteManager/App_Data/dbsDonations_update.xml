@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Tables title="Paypal Payments MOD Update" applied="false">
+  <Alter>
+    <Table name="FORUM_DONATION">
+      <Column action="ADD" name="DONATION_NAME" type="nvarchar" size="150" allownulls="true" />
+      <Column action="ADD" name="DONATION_ANON" type="int" allownulls="false" default="0" />
+    </Table>
+  </Alter>
+</Tables>

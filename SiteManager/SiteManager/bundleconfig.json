@@ -1,0 +1,38 @@
+[
+  {
+    "outputFileName": "Scripts/bootstrap-dialog.min.js",
+    "inputFiles": [
+      "Scripts/bootstrap-dialog.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/json-to-table.min.js",
+    "inputFiles": [
+      "Scripts/json-to-table.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/snitz.sitemanage.min.js",
+    "inputFiles": [
+      "Scripts/snitz.sitemanage.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/dbmanager.min.css",
+    "inputFiles": [
+      "Content/dbmanager.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/pluginjs/snitz.sitemanage.min.js",
+    "inputFiles": [
+      "Scripts/pluginjs/snitz.sitemanage.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/pluginjs/json-to-table.min.js",
+    "inputFiles": [
+      "Scripts/pluginjs/json-to-table.js"
+    ]
+  }
+]

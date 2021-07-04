@@ -1,0 +1,125 @@
+﻿@model SiteManage.Models.TableEditRow
+<div class="container-fluid">
+    <!-- Form itself -->
+    @using (Html.BeginForm("EditTable", "DbManager", FormMethod.Post, new { id = "editRowForm" , @class = "form-horizontal" }))
+    {
+        @Html.HiddenFor(model=>model.IsNew)
+        @Html.HiddenFor(model => model.TableName)
+        <div class="formgroup clearfix">
+            <label class="control-label col-xs-5">Name</label>
+            <div class="col-xs-6">@Html.TextBoxFor(model => model.Name, new { @class = "form-control" })</div>
+        </div>
+        <div class="formgroup clearfix">
+            <label class="control-label col-xs-5">Data Type</label>
+            <div class="col-xs-4">
+                <select name="DataType" id="data-type" class="form-control">
+                    <option value="smallint" @if(Model.DataType=="smallint"){@Html.Raw(" selected")}>smallint</option>
+                    <option value="int" @if (Model.DataType == "int") { @Html.Raw(" selected")  }>int</option>
+                    <option value="char" @if (Model.DataType == "char") { @Html.Raw(" selected")      }>char</option>
+                    <option value="text" @if (Model.DataType == "text") { @Html.Raw(" selected")    }>text</option>
+                    <option value="ntext" @if (Model.DataType == "ntext") { @Html.Raw(" selected")     }>ntext</option>
+                    <option value="varchar" @if (Model.DataType == "varchar" && Model.Length < 2147483647) { @Html.Raw(" selected")  }>varchar</option>
+                    <option value="nvarchar" @if (Model.DataType == "nvarchar" && Model.Length < 2147483647) { @Html.Raw(" selected")  }>nvarchar</option>
+                    <option value="varchar" @if (Model.DataType == "varchar" && Model.Length== 2147483647) { @Html.Raw(" selected")   }>varchar(Max)</option>
+                    <option value="nvarchar" @if (Model.DataType == "nvarchar" && Model.Length== 2147483647) { @Html.Raw(" selected")   }>nvarchar(Max)</option>
+                </select>
+            </div>
+        </div>
+        <div class="formgroup clearfix">
+            <label class="control-label col-xs-5">Length</label>
+            <div class="col-xs-4">@Html.TextBoxFor(model => model.Length, new { @class = "form-control",id="datalength" })</div>
+        </div>
+        if (new string[] { "int", "smallint", "guid" }.Contains(Model.DataType))
+        {
+            <div class="formgroup clearfix">
+                <label class="control-label col-xs-5">Identity</label>
+                <div class="col-xs-4">@Html.CheckBoxFor(model => model.Identity, new { @class = "checkbox" })</div>
+            </div>
+            <div class="formgroup clearfix">
+                <label class="control-label col-xs-5">Auto Increment</label>
+                <div class="col-xs-4">@Html.CheckBoxFor(model => model.AutoIncrement, new { @class = "checkbox" })</div>
+            </div>
+        }
+
+        <div class="formgroup clearfix">
+            <label class="control-label col-xs-5">AllowNull</label>
+            <div class="col-xs-4">@Html.CheckBoxFor(model => model.AllowNull, new { @class = "checkbox" })</div>
+        </div>
+        <div class="formgroup clearfix">
+            <label class="control-label col-xs-5">Default</label>
+            <div class="col-xs-4">@Html.TextBoxFor(model => model.Default, new { @class = "form-control" })</div>
+        </div>
+        <div id="success">@Html.ValidationSummary(false)</div> <!-- For success/fail messages -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+            <input type="submit" class="btn btn-primary" value="Save" />
+        </div>
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        if ($('#data-type').val() == 'int' || $('#data-type').val() == 'smallint' ||
+            $('#data-type').val() == 'text' || $('#data-type').val() == 'ntext'
+            || $(this).find("option:selected").text().indexOf('Max')>-1) {
+            $('#datalength').attr('readonly', true);
+        }
+        $('#data-type').on('change', function () {
+
+            if ($(this).val() == 'int' ) {
+                $('#datalength').attr('readonly', true);
+                $('#datalength').val('4');
+            } else if ($(this).val() == 'smallint'){
+                $('#datalength').attr('readonly', true);
+                $('#datalength').val('2');
+            } else if ($(this).val() == 'text') {
+                $('#datalength').attr('readonly', true);
+                $('#datalength').val('2147483647');
+            } else if ($(this).val() == 'ntext') {
+                $('#datalength').attr('readonly', true);
+                $('#datalength').val('1073741823');
+            } else if ($(this).find("option:selected").text().indexOf('Max')>-1) {
+                $('#datalength').attr('readonly', true);
+                $('#datalength').val('2147483647');
+            } else {
+                $('#datalength').removeAttr('readonly');
+                $('#datalength').val('50');
+            }
+            });
+        $('form').submit(function () {
+            $('input[type="submit"]').attr('disabled', 'disabled');
+            if ($(this).valid()) {
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    success: function (result) {
+                        $('#editModal').modal('hide');
+                        var dlg = BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_PRIMARY,
+                            title: 'Table Editor',
+                            message: result //'Message was sent successfully'
+                        });
+                        setTimeout(function () {
+                            dlg.close();
+                        }, 2000);
+                    },
+                    error: function (error) {
+                        BootstrapDialog.alert({
+                            title: 'Table Editor Error',
+                            message: error
+                        });
+                    }
+                });
+            } else {
+                $('input[type="submit"]').removeAttr('disabled');
+            }
+            return false;
+        });
+        $('#editModal').on('hidden.bs.modal', function () {
+            $(this).removeData('bs.modal');
+        });
+    });
+</script>
+
