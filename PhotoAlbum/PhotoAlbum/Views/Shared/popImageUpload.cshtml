@@ -1,0 +1,174 @@
+﻿
+@using LangResources.Utility
+@using SnitzConfig
+
+@model PhotoAlbum.ViewModels.UploadViewModel
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h4 class="modal-title">@ResourceManager.GetLocalisedString("lblUpload","PhotoAlbum")</h4>
+      </div>
+      <div class="modal-body container-fluid">
+          @using (Html.BeginForm("Upload", "PhotoAlbum", FormMethod.Post, new { @class = "form-horizontal", enctype = "multipart/form-data", role = "form", id = "galleryUploadForm" }))
+          {
+              <div class="form-group">
+                  <div class="col-xs-4">&nbsp;</div>
+                  <div class="col-xs-8">
+                      @String.Format(ResourceManager.GetLocalisedString("maxFileSize", "labels"), ClassicConfig.GetValue("INTMAXIMAGESIZE")) <br />
+                      @String.Format(ResourceManager.GetLocalisedString("allowedFiles", "labels"), ClassicConfig.GetValue("STRIMAGETYPES"))
+                      @Html.ValidationSummary(false, null, new { @class = "alert-danger" })
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="control-label col-sm-4" for="Description">@ResourceManager.GetLocalisedString("lblDescription", "PhotoAlbum"):</label>
+                  <div class="col-sm-8">
+                      @Html.TextBoxFor(m => m.Description, new { @class = "form-control", placeholder = ResourceManager.GetLocalisedString("lblDescription", "PhotoAlbum"), id = "Description" })
+                  </div>
+              </div>
+              if (ViewBag.DisplayAll)
+              {
+                  <div class="form-group">
+                      <label class="control-label col-sm-4" for="ScientificName">@ResourceManager.GetLocalisedString("lblScientificName", "PhotoAlbum"):</label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="ScientificName" placeholder="@ResourceManager.GetLocalisedString("lblScientificName", "PhotoAlbum")" id="ScientificName">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="control-label col-sm-4" for="CommonName">@ResourceManager.GetLocalisedString("lblLocalName", "PhotoAlbum"):</label>
+                      <div class="col-sm-8">
+                          <input type="text" class="form-control" name="CommonName" placeholder="@ResourceManager.GetLocalisedString("lblLocalName", "PhotoAlbum")" id="CommonName">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="control-label col-sm-4" for="Group">@ResourceManager.GetLocalisedString("lblGroup", "PhotoAlbum"):</label>
+                      <div class="col-sm-8">
+                          @Html.DropDownListFor(m => m.Group, Model.GroupList, "Please Select", new { @class = "form-control", id = "Group" })
+                      </div>
+                  </div>
+                  <input type="checkbox" id="showCaption" name="showCaption" style="display:none;" />
+              }
+              else
+              {
+                  @Html.HiddenFor(m => m.ScientificName)
+                  @Html.HiddenFor(m => m.CommonName)
+                  @Html.HiddenFor(m => m.Group)
+
+                  <div class="form-group">
+                      <div class="col-sm-4"></div>
+                      <div class="col-sm-8 checkbox"><label><input type="checkbox" id="showCaption" name="showCaption" /> @ResourceManager.GetLocalisedString("lblShowCaption", "PhotoAlbum")</label></div>
+                  </div>
+              }
+              <div class="form-group">
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 checkbox"><label>@Html.CheckBoxFor(m => m.MarkAsPrivate, new { id = "MarkAsPrivate" }) @ResourceManager.GetLocalisedString("lblPrivate", "PhotoAlbum")</label></div>
+              </div>
+              <div class="form-group">
+                  <div class="col-sm-4"></div>
+                  <div class="col-sm-8 checkbox"><label>@Html.CheckBoxFor(m => m.MarkAsDoNotFeature, new { id = "MarkAsDoNotFeature" }) @ResourceManager.GetLocalisedString("lblDoNotFeature", "PhotoAlbum") </label></div>
+              </div>
+              <div class="form-group">
+                  <label class="control-label col-sm-4" for="Image">@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum"):</label>
+                  <div class="col-sm-8">
+                      <div id="dZUpload" class="dropzone">
+                          <div class="fallback">
+                              <div class="input-group">
+                                  <label class="input-group-btn">
+                                      <span class="btn btn-primary">
+                                          @ResourceManager.GetLocalisedString("btnBrowse", "labels") <input style="display: none;" type="file" accept="image/*" name="ImageFile" id="ImageFile">
+                                      </span>
+                                  </label>
+                                  <input class="form-control" type="text" readonly="" id="Image">
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          }
+          <div class="form-group">
+              <div class="col-sm-6 pull-right text-right">
+                  <input type="button" value="@ResourceManager.GetLocalisedString("btnCancel", "labels")" class="btn modal-close-btn btn-danger" />
+                  <input type="button" value="@ResourceManager.GetLocalisedString("btnSave", "labesl")" class="btn btn-success" id="albumUpload" />
+              </div>
+          </div>
+      </div>
+
+<script type="text/javascript">
+    $(document).ready(function (){
+        setRequiredFields();
+        var galleryDropzone = new Dropzone("#dZUpload", {
+            //forceFallback: true,
+            url: window.SnitzVars.baseUrl + 'PhotoAlbum/Upload',
+            maxFiles: 1,
+            autoProcessQueue: false,
+            addRemoveLinks: true,
+            maxFilesize: 10,
+            acceptedFiles: "@ClassicConfig.GetValue("STRIMAGETYPES")",
+            accept: function (file, done) {
+                if (file.name.length > 255) {
+                    done("Filename exceeds 255 characters!");
+                }
+                else { done(); }
+            },
+            dictDefaultMessage: "@Html.Raw(ResourceManager.GetLocalisedString("UploadImage", "Dropzone"))", //"Drop File here to upload"
+            paramName: "ImageFile",
+            init: function () {
+
+                var submitButton = document.querySelector("#albumUpload");
+                var wrapperThis = this;
+
+                submitButton.addEventListener("click", function (e) {
+                    $.validator.unobtrusive.parse($("#galleryUploadForm"));
+
+                    if ($("#galleryUploadForm").valid()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        wrapperThis.processQueue();
+                    }
+                });
+                
+            }
+        });
+
+        galleryDropzone.on("sending", function (data, xhr, formData) {
+            formData.append("Description", $("#Description").val());
+            formData.append("ScientificName", $("#ScientificName").val());
+            formData.append("CommonName", $("#CommonName").val());
+            formData.append("Group", $("#Group").val());
+            formData.append("MarkAsPrivate", $("#MarkAsPrivate").is(':checked'));
+            formData.append("MarkAsDoNotFeature", $("#MarkAsDoNotFeature").is(':checked'));
+            formData.append("showCaption", $("#showCaption").is(':checked'));
+        });
+
+        galleryDropzone.on("complete", function (data) {
+            //File Upload response from the server
+            var arr = data.xhr.responseText.split('|');
+            if (arr[0].replace('"', '') === 'Error') {
+                BootstrapDialog.alert(
+                    {
+                        title: "Error ",
+                        message: arr[1]
+                    });
+            } else {
+                $('#modal-gallery-upload').modal('hide');
+                if ($("#editorDiv").length > 0) {
+                    var parentDiv = $("#editorDiv");
+                    var textId = parentDiv.find(".bbc-code-editor")[0].id;
+                    //alert(arr[2]);
+                    if (arr[2].replace('"', '')=="true") {
+                        $("#" + textId).insertAtCaret("[cimage=" + arr[1].replace('"', '') + "]");
+                    } else {
+                        $("#" + textId).insertAtCaret("[image=" + arr[1].replace('"', '') + "]");
+                    }
+                    
+
+                } else {
+                    location.reload();
+                }
+            }
+        });
+
+    });
+
+</script>
+

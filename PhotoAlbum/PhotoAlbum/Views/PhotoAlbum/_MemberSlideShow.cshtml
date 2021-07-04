@@ -1,0 +1,125 @@
+﻿@using LangResources.Utility
+@using SnitzDataModel.Extensions
+@using PhotoAlbum.Views.Helpers
+@model PhotoAlbum.ViewModels.ImageModel
+@{
+    ViewBag.Title = ViewBag.Username + "'s Photo Album";
+}
+
+    <div class="container-fluid" style="text-align:center; position: relative;height: 640px;">
+        <div class="row-fluid" id="SlideshowNav">
+            <a class="left col-xs-1 col-xs-offset-4" href="#myCarousel" role="button" title="@ResourceManager.GetLocalisedString("Previous", "General")">
+                <span class="fa fa-chevron-left fa-2x" aria-hidden="true"></span>
+                <span class="sr-only">@ResourceManager.GetLocalisedString("Previous", "General")</span>
+            </a>
+            <div class="small col-xs-2" id="galleryImageLbl">
+                @Html.Raw(ViewBag.title)
+            </div>
+            <a class="right col-xs-1" href="#myCarousel" role="button" title="@ResourceManager.GetLocalisedString("Next", "General")">
+                <span class="fa fa-chevron-right fa-2x" aria-hidden="true"></span>
+                <span class="sr-only">@ResourceManager.GetLocalisedString("Next", "General")</span>
+            </a>
+
+        </div>
+        <div class="container-fluid" style="text-align: center;">
+
+            <div id="SlideshowImages" class="">
+                <img src="@Html.ImageUrlFor(Model.CurrentImage.Location, Model.CurrentImage.Timestamp)" data-id="@(Model.CurrentIdx)" data-user="@ViewBag.Username" alt="No Image" style="max-height: 95%; max-width: 95%;" id="galleryImage" />
+            </div>
+            <div class="row" style="text-align: center;" id="SlideshowNavB">
+                <a class="left col-xs-1 col-xs-offset-4" href="#myCarousel" role="button" title="@ResourceManager.GetLocalisedString("Previous", "General")">
+                    <span class="fa fa-chevron-left fa-2x" aria-hidden="true"></span>
+                    <span class="sr-only">@ResourceManager.GetLocalisedString("Previous", "General")</span>
+                </a>
+                <div class="small col-xs-2" id="galleryImageFooterLbl">
+                    @Html.Raw(ViewBag.footer)
+                </div>
+                <a class="right col-xs-1" href="#myCarousel" role="button" title="@ResourceManager.GetLocalisedString("Next", "General")">
+                    <span class="fa fa-chevron-right fa-2x" aria-hidden="true"></span>
+                    <span class="sr-only">@ResourceManager.GetLocalisedString("Next", "General")</span>
+                </a>
+            </div>
+        </div>
+        <input type="hidden" id="json-data" value="@ViewBag.JsonParams" />
+    </div>
+
+    <script>
+                $('#SlideshowNav,#SlideshowNavB')
+                    .on('click',
+                        '.left',
+                        function() {
+                            var idx = $('#galleryImage').data("id") - 1;
+                            var searchdata = $("#json-data").val();
+                            //clearTimeout(imgTimeout);
+                            $.ajax({
+                                type: "GET",
+                                url: '@Url.Action("Next", "PhotoAlbum")' +
+                                    '/' +
+                                    idx +
+                                    '?member=' +
+                                    $('#galleryImage').data("user") +
+                                    '&searchparams=' +
+                                    searchdata,
+                                success: function(data) {
+                                    $('#galleryImage')
+                                        .fadeOut(500,
+                                            function() {
+                                                $('#galleryImage').attr('src', data.src);
+                                                $('#galleryImage').fadeIn(500);
+                                            });
+                                    $('#galleryImage').data("id", data.idx);
+                                    $('#galleryImageLbl').html(data.title);
+                                    $('#galleryImageFooterLbl').html(data.desc);
+                                    //if (timing > 0) {
+                                    //    imgTimeout = window.setTimeout(loop, timing);
+                                    //}
+                                },
+                                error: function(error) {
+                                    //clearTimeout(imgTimeout);
+                                    BootstrapDialog.alert({
+                                        title: '@ResourceManager.GetLocalisedString("lblError", "labels")',
+                                        message: error
+                                    });
+                                }
+                            });
+                        });
+                $('#SlideshowNav,#SlideshowNavB')
+                    .on('click',
+                        '.right',
+                        function() {
+                            var idx = $('#galleryImage').data("id") + 1;
+                            var searchdata = $("#json-data").val();
+                            //clearTimeout(imgTimeout);
+                            $.ajax({
+                                type: "GET",
+                                url: '@Url.Action("Next", "PhotoAlbum")' +
+                                    '/' +
+                                    idx +
+                                    '?member=' +
+                                    $('#galleryImage').data("user") +
+                                    '&searchparams=' +
+                                    searchdata,
+                                success: function(data) {
+                                    $('#galleryImage')
+                                        .fadeOut(500,
+                                            function() {
+                                                $('#galleryImage').attr('src', data.src);
+                                                $('#galleryImage').fadeIn(500);
+                                            });
+                                    $('#galleryImage').data("id", data.idx);
+                                    $('#galleryImageLbl').html(data.title);
+                                    $('#galleryImageFooterLbl').html(data.desc);
+                                    //if (timing > 0) {
+                                    //    imgTimeout = window.setTimeout(loop, timing);
+                                    //}
+                                },
+                                error: function(error) {
+                                    //clearTimeout(imgTimeout);
+                                    BootstrapDialog.alert({
+                                        title: '@ResourceManager.GetLocalisedString("lblError", "labels")',
+                                        message: error
+                                    });
+                                }
+                            });
+                        });
+    </script>

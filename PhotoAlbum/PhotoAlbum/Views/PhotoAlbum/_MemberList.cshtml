@@ -1,0 +1,28 @@
+﻿@using LangResources.Utility
+@model List<PhotoAlbum.Models.AlbumImage>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <ul class="list-unstyled">
+            <li>
+                <div class="col-xs-6 col-md-4">@ResourceManager.GetLocalisedString("lblFileName", "PhotoAlbum")</div>
+                <div class="col-xs-6 col-md-8">@ResourceManager.GetLocalisedString("lblForumcode", "PhotoAlbum")</div>
+            </li>
+        </ul>
+        </div>
+        <div class="panel-body">
+            <ul class="list-unstyled">
+                @foreach (var photo in Model)
+            {
+                    <li>
+                        <div class="col-xs-6 col-md-4">
+                            <a class="view-gallery" target="_blank" href="@Url.Action("Gallery", new {id = photo.MemberName, photoid = photo.Id,pagenum=1, searchparams= ViewBag.JsonParams })" title="@ResourceManager.GetLocalisedString("lblImage","PhotoAlbum") @photo.Id">@photo.Location</a>
+                        </div>
+                        <div class="col-xs-6 col-md-8">[Image=@photo.Id]</div>
+                    </li>
+
+                }
+
+            </ul>
+        </div>
+    </div>

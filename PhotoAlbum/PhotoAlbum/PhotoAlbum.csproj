@@ -1,0 +1,586 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C6CCA9C2-05E5-4A14-AED1-DDB3B1F93541}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PhotoAlbum</RootNamespace>
+    <AssemblyName>PhotoAlbum</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Dependency\Antlr3.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="BbCodeFormatter, Version=1.0.7841.37581, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Snitz-DLL\BbCodeFormatter.dll</HintPath>
+    </Reference>
+    <Reference Include="LangResources, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Snitz-DLL\LangResources.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Dependency\log4net.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MvcBreadCrumbs">
+      <HintPath>..\..\..\Dependency\MvcBreadCrumbs.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Dependency\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RazorGenerator.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\RazorGenerator.Mvc.2.0.0\lib\net40\RazorGenerator.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Snitz.Base, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Snitz-DLL\Snitz.Base.dll</HintPath>
+    </Reference>
+    <Reference Include="SnitzCore, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Snitz-DLL\SnitzCore.dll</HintPath>
+    </Reference>
+    <Reference Include="SnitzDataModel, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Snitz-DLL\SnitzDataModel.dll</HintPath>
+    </Reference>
+    <Reference Include="SnitzMembership, Version=1.0.7841.37581, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Snitz-DLL\SnitzMembership.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.ApplicationServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\..\..\Dependency\System.Web.Http.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Abstractions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Configuration">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web.Services">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.EnterpriseServices">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>False</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Dependency\WebActivatorEx.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Dependency\WebGrease.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependency\WebMatrix.Data.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Dependency\WebMatrix.WebData.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RazorGeneratorMvcStart.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AlbumImageController.cs" />
+    <Compile Include="Controllers\PhotoAlbumController.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
+    <Compile Include="Helpers\PhotoAlbumInit.cs" />
+    <Compile Include="Models\AlbumImage.cs" />
+    <Compile Include="Models\ThumbnailResult.cs" />
+    <Compile Include="Models\PhotoRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AlbumViewModels.cs" />
+    <Compile Include="ViewModels\ImageModel.cs" />
+    <Compile Include="Views\Helpers\PhotoAlbumHelpers.cs" />
+    <Compile Include="Views\PhotoAlbum\Admin.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Admin.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\AlbumNew.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AlbumNew.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\Member.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Member.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\Album.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Album.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\MemberImages.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberImages.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\popEditImage.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>popEditImage.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\Gallery.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Gallery.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_AlbumPager.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_AlbumPager.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_Enable.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_Enable.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_Featured.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_Featured.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_FeaturedImage.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_FeaturedImage.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_ImagePager.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_ImagePager.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_MemberDetails.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_MemberDetails.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_MemberList.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_MemberList.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_MemberSlideShow.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_MemberSlideShow.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_MemberThumbs.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_MemberThumbs.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_SpeciesDetails.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_SpeciesDetails.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_SpeciesPager.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_SpeciesPager.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PhotoAlbum\_SpeciesSearch.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>_SpeciesSearch.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Shared\popImageUpload.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>popImageUpload.cshtml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+    <None Include="Content\bootstrap-dialog.css" />
+    <None Include="Content\bootstrap-dialog.min.css" />
+    <None Include="Content\bootstrap-responsive.css" />
+    <None Include="Content\bootstrap-responsive.min.css" />
+    <None Include="Content\bootstrap-spinedit.css" />
+    <None Include="Content\bootstrap-spinedit.min.css" />
+    <None Include="Content\bootstrap-switch.css" />
+    <None Include="Content\bootstrap-switch.min.css" />
+    <None Include="Content\bootstrap-theme.css" />
+    <None Include="Content\bootstrap-theme.min.css" />
+    <None Include="Content\bootstrap.css" />
+    <None Include="Content\bootstrap.min.css">
+      <DependentUpon>bootstrap.css</DependentUpon>
+    </None>
+    <Content Include="App_Data\dbsPhotoalbum.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Data\dbsPhotoalbumUpdate.xml" />
+    <None Include="Content\font-awesome.css" />
+    <None Include="Content\font-awesome.min.css" />
+    <None Include="Content\fonts\fontawesome-webfont.svg" />
+    <None Include="Content\jquery-ui.css" />
+    <None Include="Content\jquery-ui.min.css" />
+    <None Include="Content\dropzone.css" />
+    <None Include="Content\dropzone.min.css">
+      <DependentUpon>dropzone.css</DependentUpon>
+    </None>
+    <Content Include="Content\images\notfound.jpg" />
+    <Content Include="Content\images\notfound_lg.jpg" />
+    <None Include="Content\plugincss\bjqs.css" />
+    <Content Include="Content\plugincss\bjqs.min.css">
+      <DependentUpon>bjqs.css</DependentUpon>
+    </Content>
+    <None Include="Content\plugincss\jquery.bsPhotoGallery.css" />
+    <Content Include="Content\plugincss\jquery.bsPhotoGallery.min.css">
+      <DependentUpon>jquery.bsPhotoGallery.css</DependentUpon>
+    </Content>
+    <None Include="Content\plugincss\jquery.contextMenu.css" />
+    <None Include="Content\plugincss\photoalbum.css" />
+    <None Include="Content\snitz.css" />
+    <None Include="Content\snitz.min.css">
+      <DependentUpon>snitz.css</DependentUpon>
+    </None>
+    <None Include="Content\bootstrap-theme.css.map" />
+    <None Include="Content\bootstrap.css.map" />
+    <Content Include="Content\plugincss\jquery.contextMenu.min.css">
+      <DependentUpon>jquery.contextMenu.css</DependentUpon>
+    </Content>
+    <Content Include="Content\plugincss\photoalbum.min.css">
+      <DependentUpon>photoalbum.css</DependentUpon>
+    </Content>
+    <None Include="Scripts\bootstrap-dialog.js" />
+    <None Include="Scripts\bootstrap-spinedit.js" />
+    <None Include="Scripts\bootstrap-spinedit.min.js" />
+    <None Include="Scripts\bootstrap-switch.js" />
+    <None Include="Scripts\bootstrap-switch.min.js" />
+    <None Include="Scripts\bootstrap-tabcollapse.js" />
+    <None Include="Scripts\bootstrap-tabcollapse.min.js" />
+    <None Include="Scripts\bootstrap.js" />
+    <None Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\bootstrap-dialog.min.js">
+      <DependentUpon>bootstrap-dialog.js</DependentUpon>
+    </None>
+    <None Include="Scripts\dropzone.js" />
+    <None Include="Scripts\dropzone.min.js">
+      <DependentUpon>dropzone.js</DependentUpon>
+    </None>
+    <None Include="Scripts\pluginjs\jquery.bsPhotoGallery.js" />
+    <Content Include="Scripts\pluginjs\jquery.bsPhotoGallery.min.js">
+      <DependentUpon>jquery.bsPhotoGallery.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\pluginjs\jquery.contextMenu.min.js">
+      <DependentUpon>jquery.contextMenu.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\pluginjs\jquery.ui.position.min.js">
+      <DependentUpon>jquery.ui.position.js</DependentUpon>
+    </Content>
+    <None Include="Scripts\pluginjs\snitz.gallery.upload.js" />
+    <None Include="Scripts\html5shiv.js" />
+    <None Include="Content\fonts\fontawesome-webfont.eot" />
+    <None Include="Content\fonts\fontawesome-webfont.ttf" />
+    <None Include="Content\fonts\fontawesome-webfont.woff" />
+    <None Include="Content\fonts\fontawesome-webfont.woff2" />
+    <None Include="Content\fonts\FontAwesome.otf" />
+    <None Include="Properties\PublishProfiles\PhotoAlbum.pubxml" />
+    <None Include="Scripts\jquery-2.1.4.intellisense.js" />
+    <None Include="Scripts\jquery-2.1.4.js" />
+    <None Include="Scripts\jquery-2.1.4.min.js" />
+    <None Include="Scripts\jquery-ui.js" />
+    <None Include="Scripts\jquery-ui.min.js" />
+    <None Include="Scripts\jquery.cookie.js" />
+    <None Include="Scripts\jquery.cookie.min.js" />
+    <None Include="Scripts\jquery.highlight-5.js" />
+    <None Include="Scripts\jquery.highlight-5.min.js" />
+    <None Include="Scripts\jquery.timeago.js" />
+    <None Include="Scripts\jquery.timeago.min.js" />
+    <None Include="Scripts\jquery.twosidedmultiselect.js" />
+    <None Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <None Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <None Include="Scripts\jquery.validate.js" />
+    <None Include="Scripts\jquery.validate.min.js" />
+    <None Include="Scripts\jquery.validate.unobtrusive.js" />
+    <None Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <None Include="Scripts\npm.js" />
+    <None Include="Scripts\pagetimer.js" />
+    <None Include="Scripts\pwstrength.js" />
+    <None Include="Scripts\pwstrength.min.js" />
+    <None Include="Scripts\snitz.editor.js" />
+    <None Include="Scripts\snitz.jquery.js" />
+    <None Include="Scripts\snitz.jquery.min.js" />
+    <None Include="Scripts\snitz.upload.js" />
+    <None Include="Scripts\snitz.validator.js" />
+    <None Include="Scripts\timeago\timeago.no.js" />
+    <None Include="Scripts\pluginjs\jquery.contextMenu.js" />
+    <None Include="Scripts\pluginjs\jquery.ui.position.js" />
+    <Content Include="Scripts\pluginjs\snitz.gallery.upload.min.js">
+      <DependentUpon>snitz.gallery.upload.js</DependentUpon>
+    </Content>
+    <None Include="Scripts\pluginjs\snitz.photoalbum.js" />
+    <Content Include="Scripts\pluginjs\snitz.photoalbum.min.js">
+      <DependentUpon>snitz.photoalbum.js</DependentUpon>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <None Include="Views\PhotoAlbum\AlbumNew.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>AlbumNew.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\Gallery.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Gallery.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\Admin.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Admin.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\MemberImages.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>MemberImages.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_AlbumPager.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_AlbumPager.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_Enable.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_Enable.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_FeaturedImage.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_FeaturedImage.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_MemberSlideShow.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_MemberSlideShow.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\Album.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Album.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_MemberThumbs.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_MemberThumbs.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_SpeciesDetails.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_SpeciesDetails.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_SpeciesPager.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_SpeciesPager.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_SpeciesSearch.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_SpeciesSearch.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\Web.config" />
+    <None Include="Views\PhotoAlbum\_Featured.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_Featured.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\_ViewStart.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\popImageUpload.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>popImageUpload.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_MemberDetails.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_MemberDetails.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_MemberList.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_MemberList.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\popEditImage.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>popEditImage.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Views\PhotoAlbum\_ImagePager.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>_ImagePager.generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Content\PhotoAlbum\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\PhotoAlbum\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Views\PhotoAlbum\Member.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Member.generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\jquery-2.1.4.min.map" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5859</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:5478/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

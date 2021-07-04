@@ -1,0 +1,134 @@
+﻿@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+@using SnitzCore.Extensions;
+@model List<PhotoAlbum.Models.AlbumImage>
+@using (Html.BeginForm("MemberImages", "PhotoAlbum"))
+{
+    <div>
+        @{
+            int pagecount = Convert.ToInt32(ViewBag.PageCount);
+            int page = ViewBag.Page;
+            int intLow = page - 1;
+            int intHigh = page + 3;
+            if (intLow < 1)
+            {
+                intLow = 1;
+            }
+            if (intHigh > pagecount)
+            {
+                intHigh = pagecount;
+            }
+            if (intHigh - intLow < 5)
+            {
+                while ((intHigh < intLow + 4) && intHigh < pagecount)
+                {
+                    intHigh++;
+                }
+            }
+            if (intHigh - intLow < 5)
+            {
+                while ((intLow > intHigh - 4) && intLow > 1)
+                {
+                    intLow--;
+                }
+            }
+        }
+        @if (pagecount > 1)
+        {
+            <ul class="pager">
+                @if (page > 1)
+                {
+                    <li><span class="pager-link" data-val="1">
+                        @Ajax.RawActionLink("<<", "MemberImages", new { id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = 1, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage },
+                            new AjaxOptions()
+                           {
+                               UpdateTargetId = "ImageContainer",
+                               InsertionMode = InsertionMode.Replace,
+                               OnSuccess = "refreshlazyload",
+                               HttpMethod = "GET"
+                           }, new { data_toggle = "tooltip" })
+                        @*@Html.ActionLink("<<", "MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = 1, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage}, htmlAttributes: null)*@
+                    </span></li>
+                    <li><span class="pager-link" data-val="@(page-1)">
+                        @Ajax.RawActionLink("<", "MemberImages", new { id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = page - 1, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage },
+                            new AjaxOptions()
+                            {
+                                UpdateTargetId = "ImageContainer",
+                                InsertionMode = InsertionMode.Replace,
+                                OnSuccess = "refreshlazyload",
+                                HttpMethod = "GET"
+                            }, new { data_toggle = "tooltip" })
+                        @*@Html.ActionLink("<", "MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = page - 1, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage}, htmlAttributes: null)*@
+                    </span></li>
+                }
+
+
+                @for (int i = intLow; i < intHigh + 1; i++)
+                {
+                    if (i == page)
+                    {
+                        <li><span class="pager-link-current" data-val="@i">
+                            @Ajax.RawActionLink(i.ToLangNum() + "", "MemberImages", new { id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = i, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage },
+                                new AjaxOptions()
+                                {
+                                    UpdateTargetId = "ImageContainer",
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnSuccess = "refreshlazyload",
+                                    HttpMethod = "GET"
+                                }, new { data_toggle = "tooltip" })
+                            @*@Html.ActionLink(i.ToLangNum() + "", "MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = i, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage}, htmlAttributes: null)*@
+                        </span></li>
+                    }
+                    else
+                    {
+                        <li><span class="pager-link" data-val="@i">
+                            @Ajax.RawActionLink(i.ToLangNum() + "", "MemberImages", new { id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = i, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage },
+                                new AjaxOptions()
+                                {
+                                    UpdateTargetId = "ImageContainer",
+                                    InsertionMode = InsertionMode.Replace,
+                                    OnSuccess = "refreshlazyload",
+                                    HttpMethod = "GET"
+                                }, new { data_toggle = "tooltip" })
+                            @*@Html.ActionLink(i.ToLangNum() + "", "MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = i, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage}, htmlAttributes: null)*@
+                        </span></li>
+                    }
+                }
+                @if (page < pagecount)
+                {
+                    <li><span class="pager-link" data-val="@(page+1)">
+                        @Ajax.RawActionLink(">", "MemberImages", new { id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = page+1, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage },
+                            new AjaxOptions()
+                            {
+                                UpdateTargetId = "ImageContainer",
+                                InsertionMode = InsertionMode.Replace,
+                                OnSuccess = "refreshlazyload",
+                                HttpMethod = "GET"
+                            }, new { data_toggle = "tooltip" })
+                        @*@Html.ActionLink(">", "MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = page + 1, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage}, htmlAttributes: null)*@
+                    </span></li>
+                    <li><span class="pager-link" data-val="@pagecount">
+                        @Ajax.RawActionLink(">>", "MemberImages", new { id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = pagecount, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage },
+                            new AjaxOptions()
+                            {
+                                UpdateTargetId = "ImageContainer",
+                                InsertionMode = InsertionMode.Replace,
+                                OnSuccess = "refreshlazyload",
+                                HttpMethod = "GET"
+                            }, new { data_toggle = "tooltip" })
+                        @*@Html.ActionLink(">>", "MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, pagenum = pagecount, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage}, htmlAttributes: null)*@
+                    </span></li>
+                }
+                
+                <li>@String.Format(ResourceManager.GetLocalisedString("lblTotalPages", "labels"),pagecount)</li>
+            </ul>
+        }
+        else
+        {
+            <p></p>
+        }
+    </div>
+    <input type="hidden" name="SortDesc" value="@(ViewBag.SortDir=="desc"? 1 : 0)" />
+    <input type="hidden" name="sortby" value="@ViewBag.SortBy" />
+
+}

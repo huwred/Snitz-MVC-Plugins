@@ -1,0 +1,20 @@
+﻿@using SnitzDataModel.Extensions
+@using Snitz.Base;
+@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+@model PhotoAlbum.Models.AlbumImage
+@{
+    Layout = null;
+
+}
+<h4>@Model.Description</h4>
+<img src="@Html.ImageUrlFor(Model.Location,Model.Timestamp)" alt="[Image=@Model.Id]" id="featured-img" />
+<ul class="list-unstyled small">
+    <li>Tag [Image=@Model.Id]</li>
+    <li>@ResourceManager.GetLocalisedString("lblFileName", "PhotoAlbum"): @Model.Location</li>
+    <li>@ResourceManager.GetLocalisedString("lblScientificName", "PhotoAlbum"): @Model.ScientificName</li>
+    <li>@ResourceManager.GetLocalisedString("lblLocalName", "PhotoAlbum"): @Model.CommonName</li>
+    <li>@ResourceManager.GetLocalisedString("lblOwner", "PhotoAlbum"): @Model.MemberName</li>
+    <li>@ResourceManager.GetLocalisedString("lblDate", "PhotoAlbum"): @Model.Timestamp.ToSnitzDateTime().ToFormattedString()</li>
+</ul>
+

@@ -1,0 +1,358 @@
+﻿@using SnitzConfig
+@using PetaPoco
+@using SnitzCore.Extensions
+@using SnitzDataModel.Extensions
+@using Snitz.Base
+@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+
+@model PhotoAlbum.ViewModels.SpeciesAlbum
+
+@{
+    ViewBag.Title = ResourceManager.GetLocalisedString("mnuCommonAlbum");
+    ViewBag.PageTitle = ResourceManager.GetLocalisedString("mnuCommonAlbum");
+    ViewBag.ShowThumbs = Model.Thumbs;
+
+    string controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    int pagecount = Convert.ToInt32(ViewBag.PageCount);
+    int page = ViewBag.Page;
+    int intLow = page - 1;
+    int intHigh = page + 3;
+    if (intLow < 1) { intLow = 1; }
+    if (intHigh > pagecount) { intHigh = pagecount; }
+    if (intHigh - intLow < 5) { while ((intHigh < intLow + 4) && intHigh < pagecount) { intHigh++; } }
+    if (intHigh - intLow < 5) { while ((intLow > intHigh - 4) && intLow > 1) { intLow--; } }
+
+    string sortIcon = ViewBag.SortDir == "desc" ? "<i class=\"fa fa-sort-desc\"></i>" : "<i class=\"fa fa-sort-asc\"></i>";
+
+
+}
+@section styles{
+    @Html.Raw(Config.ThemeCss("plugincss/photoalbum.min.css"))
+    <style>
+        .modal-content {
+            max-width: 600px !important;
+            margin: 30px auto !important;
+        }
+    </style>
+
+}
+<h5>
+    @ViewBag.Title @if (User.Identity.IsAuthenticated)
+{@Html.ActionLink(" ", "UploadFile", "PhotoAlbum", null, new { @class = "gallery-link pull-right fa fa-upload fa-1_5x", title = ResourceManager.GetLocalisedString("lblUpload", "PhotoAlbum"), data_toggle = "tooltip" })}
+</h5>
+<hr class="title" />
+<div class="container-fluid">
+    @using (Html.BeginForm())
+    {
+        <div class="row-fluid">
+
+            <div class="form-group">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>@ResourceManager.GetLocalisedString("lblSearchin", "PhotoAlbum")</label>
+                    </div>
+                    <div class="checkbox">
+                        <label for="GroupFilter " class="checkbox-inline">@ResourceManager.GetLocalisedString("lblGroup", "PhotoAlbum")</label>
+                        @Html.CheckBoxFor(m => m.SrchId, new { @class = "checkbox" })
+                    </div>
+                    <div class="checkbox">
+                        <label for="SrchUser" class="checkbox-inline">@ResourceManager.GetLocalisedString("Member", "General")</label>
+                        @Html.CheckBoxFor(m => m.SrchUser, new { @class = "checkbox" })
+                    </div>
+                    <div class="checkbox">
+                        <label for="SrchSciName" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblScientificName", "PhotoAlbum")</label>
+                        @Html.CheckBoxFor(m => m.SrchSciName, new { @class = "checkbox" })
+                    </div>
+                    <div class="checkbox">
+                        <label for="SrchLocName" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblLocalName", "PhotoAlbum")</label>
+                        @Html.CheckBoxFor(m => m.SrchLocName, new { @class = "checkbox" })
+                    </div>
+                    <div class="checkbox">
+                        <label for="SrchDesc" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblDescription", "PhotoAlbum")</label>
+                        @Html.CheckBoxFor(m => m.SrchDesc, new { @class = "checkbox" })
+                    </div>
+                    <div class="form-group">
+                        <label for="GroupFilter " class="checkbox-inline">@ResourceManager.GetLocalisedString("lblGroup", "PhotoAlbum")</label>
+                        @Html.DropDownList("GroupFilter", Model.GroupList, new { @class = "form-control" })
+                    </div>
+                    <div class="form-group pull-right">
+                        <label for="SrchTerm">@ResourceManager.GetLocalisedString("lblSearchFor", "PhotoAlbum")</label>
+                        @Html.TextBoxFor(m => m.SrchTerm, new { @class = "form-control" })
+                        <button type="submit" class="btn btn-default">@ResourceManager.GetLocalisedString("Search", "labels")</button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-inline">
+                    <div class="form-group" id="width-check">
+                        <label for="Thumbs">@ResourceManager.GetLocalisedString("lblSearchView", "PhotoAlbum")&nbsp;</label>
+                        @Html.CheckBoxFor(m => m.Thumbs, new { id = "viewthumbs" }) @ResourceManager.GetLocalisedString("lblShowThumbnails", "PhotoAlbum")
+                    </div>
+                    <div class="form-group">
+                        <label for="SpeciesOnly">&nbsp;</label>
+                        @Html.CheckBoxFor(m => m.SpeciesOnly, new { id = "speciesonly" }) @ResourceManager.GetLocalisedString("lblShowOnlySpecies", "PhotoAlbum")
+                    </div>
+                    <div class="form-group pull-right">
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <select class="form-control checkbox-inline dropdown-menu1" id="album-sortby" name="SortBy">
+                                    <option value="id"
+                                            @if (ViewBag.SortBy == "id") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortId", "PhotoAlbum")
+                                    </option>
+                                    <option value="date"
+                                            @if (ViewBag.SortBy == "date") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortDate", "PhotoAlbum")
+                                    </option>
+                                    <option value="user"
+                                            @if (ViewBag.SortBy == "user") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortUser", "PhotoAlbum")
+                                    </option>
+                                    <option value="desc"
+                                            @if (ViewBag.SortBy == "desc") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortDesc", "PhotoAlbum")
+                                    </option>
+                                    <option value="file"
+                                            @if (ViewBag.SortBy == "file") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortFile", "PhotoAlbum")
+                                    </option>
+                                    <option value="localname"
+                                            @if (ViewBag.SortBy == "localname") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortCommon", "PhotoAlbum")
+                                    </option>
+                                    <option value="scientific"
+                                            @if (ViewBag.SortBy == "scientific") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optSortScientific", "PhotoAlbum")
+                                    </option>
+                                </select>
+                            </span>
+                            <span class="input-group-btn">
+                                <select class="form-control" name="SortDesc" id="album-sortdesc">
+                                    <option value="desc"
+                                            @if (ViewBag.SortPage == "desc") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optDesc", "Controls")
+                                    </option>
+                                    <option value="asc"
+                                            @if (ViewBag.SortPage == "asc") { @Html.Raw("selected")  }>
+                                        @ResourceManager.GetLocalisedString("optAsc", "Controls")
+                                    </option>
+                                </select>
+                            </span>
+                            @*<span class="input-group-addon">
+                                <input class="checkbox-inline" title="@ResourceManager.GetLocalisedString("tipCheckSortDesc", "PhotoAlbum")" data-toggle="tooltip" id="album-sortdesc" type="checkbox" value="1" @if (ViewBag.SortPage == "desc") { @Html.Raw("checked") } name="SortDesc" />
+                            </span>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">&nbsp;</div>
+        </div>
+        <div class="row">
+
+            <hr class="title" />
+            <div>
+
+                @if (pagecount > 1)
+                {
+
+                    <ul class="pager">
+                        @if (page > 1)
+                        {
+                            <li><span class="pager-link"> @Html.ActionLink("<<", "Album", controllerName, new { pagenum = 1, sortOrder = ViewBag.SortPage }, htmlAttributes: null)</span></li>
+                            <li><span class="pager-link">@Html.ActionLink("<", "Album", controllerName, new { pagenum = page - 1, sortOrder = ViewBag.SortPage }, htmlAttributes: null)</span></li>
+                        }
+
+
+                        @for (int i = intLow; i < intHigh + 1; i++)
+                        {
+                            if (i == page)
+                            {
+                                <li><span class="pager-link-current">@Html.ActionLink(i + "", "Album", controllerName, new { pagenum = i, sortOrder = ViewBag.SortPage }, htmlAttributes: null)</span></li>
+                            }
+                            else
+                            {
+                                <li><span class="pager-link">@Html.ActionLink(i + "", "Album", controllerName, new { pagenum = i, sortOrder = ViewBag.SortPage }, htmlAttributes: null)</span></li>
+                            }
+                        }
+                        @if (page < pagecount)
+                        {
+                            <li><span class="pager-link">@Html.ActionLink(">", "Album", controllerName, new { pagenum = page + 1, sortOrder = ViewBag.SortPage }, htmlAttributes: null)</span></li>
+                            <li><span class="pager-link">@Html.ActionLink(">>", "Album", controllerName, new { pagenum = pagecount, sortOrder = ViewBag.SortPage }, htmlAttributes: null)</span></li>
+                        }
+                    </ul>
+
+                }
+
+            </div>
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr class="bg-primary">
+                        <th class="hidden-xs">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("Member", "General"), "Album", new { pagenum = 1, sortby = "user", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "user")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        @if (ViewBag.ShowThumbs)
+                        {
+                            <th class="col-thumb">
+                                @Html.ActionLink(@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "file", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                                @if (ViewBag.SortBy == "file")
+                                {
+                                    @Html.Raw(sortIcon)
+                                }
+                            </th>
+                        }
+                        <th class="hidden-xs hidden-sm">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblForumcode", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "id", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "id")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        <th class="">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblScientificName", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "scientific", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "scientific")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        <th class="">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblLocalName", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "localname", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "localname")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        <th class="hidden-xs">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblDescription", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "desc", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "desc")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        <th class="hidden-xs hidden-sm">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblGroup", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "group", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "group")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        <th class="hidden-xs hidden-sm">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblDate", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "date", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "date")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                        <th class="hidden-xs hidden-sm">
+                            @Html.ActionLink(@ResourceManager.GetLocalisedString("lblViews", "PhotoAlbum"), "Album", new { pagenum = 1, sortby = "views", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                            @if (ViewBag.SortBy == "views")
+                            {
+                                @Html.Raw(sortIcon)
+                            }
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var photo in Model.Images)
+                    {
+                        var imgUrl = Url.Content("~/" + photo.RootFolder + "/PhotoAlbum/thumbs/") + photo.ImageName;
+                        <tr>
+                            <td class="hidden-xs">@Html.ActionLink(photo.MemberName, "Member", new { id = photo.MemberName }, new { title = ResourceManager.GetLocalisedString("tipViewMemberAlbum", "PhotoAlbum"), data_toggle = "tooltip" })</td>
+                            @if (ViewBag.ShowThumbs)
+                            {
+                                <td class="col-thumb"><a class="view-gallery" target="_blank" href="@Url.Action("Gallery", new {id = photo.MemberName, photoid = photo.Id, pagenum = 1, searchparams = @ViewBag.JsonParams})" title="@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum") @photo.Id">
+                                    <img class="lazyload" data-src="@Html.ImageUrlFor(photo.Location, photo.Timestamp, true)"/>
+                                </a></td>
+                            }
+                            <td class="hidden-xs hidden-sm">[image=@photo.Id]</td>
+                            <td class="">@photo.ScientificName</td>
+                            <td class="">@photo.CommonName</td>
+                            <td class="hidden-xs">@photo.Description</td>
+                            <td class="hidden-xs hidden-sm">@photo.GroupName</td>
+                            <td class="hidden-xs hidden-sm">@photo.Timestamp.ToSnitzDateTime().ToFormattedString()</td>
+                            <td class="hidden-xs hidden-sm">@photo.Views</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="row">
+            <div>
+
+                @if (pagecount > 1)
+                {
+
+                    <ul class="pager">
+                        @if (page > 1)
+                        {
+                            <li><span class="pager-link"> @Html.ActionLink("<<", "Album", controllerName, new { pagenum = 1 }, htmlAttributes: null)</span></li>
+                            <li><span class="pager-link">@Html.ActionLink("<", "Album", controllerName, new { pagenum = page - 1 }, htmlAttributes: null)</span></li>
+                        }
+
+
+                        @for (int i = intLow; i < intHigh + 1; i++)
+                        {
+                            if (i == page)
+                            {
+                                <li><span class="pager-link-current">@Html.ActionLink(i + "", "Album", controllerName, new { pagenum = i }, htmlAttributes: null)</span></li>
+                            }
+                            else
+                            {
+                                <li><span class="pager-link">@Html.ActionLink(i + "", "Album", controllerName, new { pagenum = i }, htmlAttributes: null)</span></li>
+                            }
+                        }
+                        @if (page < pagecount)
+                        {
+                            <li><span class="pager-link">@Html.ActionLink(">", "Album", controllerName, new { pagenum = page + 1 }, htmlAttributes: null)</span></li>
+                            <li><span class="pager-link">@Html.ActionLink(">>", "Album", controllerName, new { pagenum = pagecount }, htmlAttributes: null)</span></li>
+                        }
+                    </ul>
+
+                }
+
+            </div>
+        </div>
+    }
+    <div class="row text-center album-copyright">
+        @ResourceManager.GetLocalisedString("lblSpeciesCopy")
+    </div>
+</div>
+
+<input type="hidden" id="json-data" value="@ViewBag.JsonParams" />
+<div id="modal-gallery-upload" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-content" id="modal-gallery-upload-content">
+    </div>
+</div>
+@section scripts
+{
+
+    <script type="text/javascript" src="~/Scripts/dropzone.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/jquery.ui.position.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/snitz.gallery.upload.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/snitz.photoalbum.min.js"></script>
+
+    <script>
+        $(document)
+            .ready(function () {
+
+                try {
+                    Dropzone.autoDiscover = false;
+                } catch (e) {
+                    console.log('Dropzone not loaded');
+                }
+            });
+    </script>
+}

@@ -1,0 +1,133 @@
+﻿@using SnitzDataModel.Extensions
+@using LangResources.Utility
+@using PhotoAlbum.Models
+@using PhotoAlbum.Views.Helpers
+@model PhotoAlbum.Models.AlbumImage
+@{
+    string imgpath = Url.Content("~/" + Model.RootFolder + "/PhotoAlbum/") +  Model.ImageName;
+    SelectList GroupList = new SelectList(new PhotoRepository().AlbumGroups(), "Id", "Description");
+
+    foreach (var item in GroupList)
+    {
+        var lname = "Group_" + item.Text.Replace(" ", "");
+        item.Text = ResourceManager.GetLocalisedString(lname, "EnumDescriptions");
+        
+    }    
+}
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+         <h4 class="modal-title">Edit Image details</h4>
+      </div>
+<div class="modal-body">
+    @Html.ValidationSummary(false,null,new{@class="alert-danger"})  
+    @using (Html.BeginForm("Edit", "PhotoAlbum", FormMethod.Post,
+        new { enctype = "multipart/form-data", role = "form", id="editImageForm"}))
+
+    {
+        <div id="editImageForm" class="form-horizontal">
+            @Html.HiddenFor(m=>m.MemberId)
+            @Html.HiddenFor(m=>m.Id)
+            @Html.HiddenFor(m=>m.Location)
+            @Html.HiddenFor(m=>m.Size)
+            @Html.HiddenFor(m=>m.Width)
+            @Html.HiddenFor(m=>m.Height)
+            @Html.HiddenFor(m=>m.Views)
+            @Html.HiddenFor(m=>m.Timestamp)
+            <div class="form-group">
+                <img class="img-rounded  center-block" style="display: block; height:150px;" src="@Html.ImageUrlFor(Model.Location, Model.Timestamp,true)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="Description">@ResourceManager.GetLocalisedString("lblDescription","PhotoAlbum"):</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="Description" id="Description" placeholder="@ResourceManager.GetLocalisedString("lblDescription","PhotoAlbum")" value="@Model.Description">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="ScientificName">@ResourceManager.GetLocalisedString("lblScientificName","PhotoAlbum"):</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="ScientificName" id="ScientificName" placeholder="@ResourceManager.GetLocalisedString("lblScientificName","PhotoAlbum")" value="@Model.ScientificName">
+                </div>        
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="CommonName">@ResourceManager.GetLocalisedString("lblLocalName","PhotoAlbum"):</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" name="CommonName" id="CommonName" placeholder="@ResourceManager.GetLocalisedString("lblLocalName","PhotoAlbum")" value="@Model.CommonName">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="Group">@ResourceManager.GetLocalisedString("lblGroup","PhotoAlbum"):</label>
+                <div class="col-sm-8">
+                    @Html.DropDownListFor(m=>m.Group, GroupList,"Please Select",new{@class="form-control",id="Group"}) 
+         
+                </div>           
+            </div>
+            <div class="form-group">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-8 checkbox"><label>@Html.CheckBoxFor(m=>m.IsPrivate) @ResourceManager.GetLocalisedString("lblPrivate", "PhotoAlbum")</label></div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-8 checkbox"><label>@Html.CheckBoxFor(m=>m.DoNotFeature) @ResourceManager.GetLocalisedString("lblDoNotFeature", "PhotoAlbum")</label></div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="Image">@ResourceManager.GetLocalisedString("lblUpload","PhotoAlbum"):</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <label class="input-group-btn">
+                            <span class="btn btn-primary">
+                                @ResourceManager.GetLocalisedString("btnBrowse", "labels") <input style="display: none;" type="file" name="ImageFile" >
+                            </span>
+                        </label>
+                        <input class="form-control" type="text" readonly="" id="Image">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 pull-right text-right">
+                    <input type="button" value="@ResourceManager.GetLocalisedString("btnCancel","labels")" class="btn modal-close-btn btn-danger" /> 
+                    <input type="submit" value="@ResourceManager.GetLocalisedString("btnSave","labels")" class="btn btn-success"/> 
+                </div>
+            </div>
+        </div>    
+    }
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $.validator.unobtrusive.parse("#editImageForm");
+        setRequiredFields();
+        $('#editImageForm').submit(function (event) {
+            event.preventDefault();
+            var validator = $(this).validate();
+            validator.showErrors();
+
+            if ($(this).valid()) {
+                $.ajax({
+                    url: this.action,
+                    type: this.method,
+                    data: $(this).serialize(),
+                    success: function() {
+                        $('#modal-gallery-upload').modal('hide');
+                        var dlg = BootstrapDialog.show({
+                            type: BootstrapDialog.TYPE_PRIMARY,
+                            title: 'Edit Image',
+                            message: 'Image details Saved'
+                        });
+                        setTimeout(function () {
+                            dlg.close();
+                        }, 1500);
+                    },
+                    error: function(error) {
+                        BootstrapDialog.alert({
+                            title: 'Error',
+                            message: error
+                        });
+                    }
+                });
+            }
+            
+            return false;
+        });
+    });
+</script>

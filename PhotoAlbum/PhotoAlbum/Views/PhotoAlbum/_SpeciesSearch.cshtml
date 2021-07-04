@@ -1,0 +1,113 @@
+﻿
+@using LangResources.Utility
+@model PhotoAlbum.ViewModels.SpeciesAlbum
+
+@{
+    
+}
+
+<div class="form-group">
+    <div class="form-inline">
+        <div class="form-group">
+            <label>@ResourceManager.GetLocalisedString("lblSearchin", "PhotoAlbum")</label>
+        </div>
+        <div class="checkbox">
+            <label for="SrchId" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblForumcode", "PhotoAlbum")</label>
+            @Html.CheckBoxFor(m => m.SrchId, new { @class = "checkbox" })
+        </div>
+        <div class="checkbox">
+            <label for="SrchUser" class="checkbox-inline">@ResourceManager.GetLocalisedString("Member", "General")</label>
+            @Html.CheckBoxFor(m => m.SrchUser, new { @class = "checkbox" })
+        </div>
+        <div class="checkbox">
+            <label for="SrchSciName" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblScientificName", "PhotoAlbum")</label>
+            @Html.CheckBoxFor(m => m.SrchSciName, new { @class = "checkbox" })
+        </div>
+        <div class="checkbox">
+            <label for="SrchLocName" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblLocalName", "PhotoAlbum")</label>
+            @Html.CheckBoxFor(m => m.SrchLocName, new { @class = "checkbox" })
+        </div>
+        <div class="checkbox">
+            <label for="SrchDesc" class="checkbox-inline">@ResourceManager.GetLocalisedString("lblDescription", "PhotoAlbum")</label>
+            @Html.CheckBoxFor(m => m.SrchDesc, new { @class = "checkbox" })
+        </div>
+        <div class="form-group">
+            <label for="GroupFilter " class="checkbox-inline">@ResourceManager.GetLocalisedString("lblGroup", "PhotoAlbum")</label>
+            @Html.DropDownList("GroupFilter", Model.GroupList, new { @class = "form-control" })
+        </div>
+        <div class="form-group pull-right">
+            <label for="SrchTerm">@ResourceManager.GetLocalisedString("lblSearchFor", "PhotoAlbum")</label>
+            @Html.TextBoxFor(m => m.SrchTerm, new { @class = "form-control" })
+            <button type="submit" class="btn btn-default">@ResourceManager.GetLocalisedString("Search", "labels")</button>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-inline">
+        <div class="form-group" id="width-check">
+            <label for="Thumbs">@ResourceManager.GetLocalisedString("lblSearchView", "PhotoAlbum")&nbsp;</label>
+            @Html.CheckBoxFor(m => m.Thumbs, new { id = "viewthumbs" }) @ResourceManager.GetLocalisedString("lblShowThumbnails", "PhotoAlbum")
+        </div>
+        <div class="form-group">
+            <label for="SpeciesOnly">&nbsp;</label>
+            @Html.CheckBoxFor(m => m.SpeciesOnly, new { id = "speciesonly" }) @ResourceManager.GetLocalisedString("lblShowOnlySpecies", "PhotoAlbum")
+        </div>
+        <div class="form-group pull-right">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <select class="form-control checkbox-inline dropdown-menu1" id="album-sortby" name="SortBy">
+                        <option value="id"
+                                @if (ViewBag.SortBy == "id") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortId", "PhotoAlbum")
+                        </option>
+                        <option value="date"
+                                @if (ViewBag.SortBy == "date") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortDate", "PhotoAlbum")
+                        </option>
+                        <option value="user"
+                                @if (ViewBag.SortBy == "user") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortUser", "PhotoAlbum")
+                        </option>
+                        <option value="desc"
+                                @if (ViewBag.SortBy == "desc") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortDesc", "PhotoAlbum")
+                        </option>
+                        <option value="file"
+                                @if (ViewBag.SortBy == "file") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortFile", "PhotoAlbum")
+                        </option>
+                        <option value="localname"
+                                @if (ViewBag.SortBy == "localname") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortCommon", "PhotoAlbum")
+                        </option>
+                        <option value="scientific"
+                                @if (ViewBag.SortBy == "scientific") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optSortScientific", "PhotoAlbum")
+                        </option>
+                    </select>
+                </span>
+                <span class="input-group-btn">
+                    <select class="form-control" name="SortOrder" id="album-sortdesc">
+                        <option value="desc"
+                                @if (ViewBag.SortDir.ToLower() == "desc") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optDesc", "Controls")
+                        </option>
+                        <option value="asc"
+                                @if (ViewBag.SortDir.ToLower() == "asc") { @Html.Raw("selected")  }>
+                            @ResourceManager.GetLocalisedString("optAsc", "Controls")
+                        </option>
+                    </select>
+                </span>
+                @*<span class="input-group-addon">
+        <input class="checkbox-inline" title="@ResourceManager.GetLocalisedString("tipCheckSortDesc", "PhotoAlbum")" data-toggle="tooltip" id="album-sortdesc" type="checkbox" value="1" @if (ViewBag.SortDir == "desc") { @Html.Raw("checked") } name="SortDesc" />
+        <input class="checkbox-inline" title="@ResourceManager.GetLocalisedString("tipCheckSortAsc", "PhotoAlbum")" data-toggle="tooltip" id="album-sortasc" type="checkbox" value="0" @if (ViewBag.SortDir != "desc") { @Html.Raw("checked") } name="SortDesc" style="display:none" />
+    </span>*@
+            </div>
+    </div> 
+    </div>
+</div>
+
+<div class="row">&nbsp;</div>
+
+    
+

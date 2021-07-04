@@ -1,0 +1,25 @@
+﻿@using SnitzConfig
+
+@using LangResources.Utility
+@using SnitzConfig
+<div class="form-group">
+    <label for="Enabled" class="control-label col-xs-3">Photo albums</label>
+    <div class="col-xs-4 col-sm-1">
+        <input class="yesno-checkbox" id="Enabled" type="checkbox" name="Enabled" data-size="mini" checked="@(ClassicConfig.GetIntValue("STRPHOTOALBUM",0) == 1)" value="true" />
+    </div>
+    <div class="col-xs-4">
+        <p class="help-block">Allow member photo albums</p>
+    </div>
+</div>
+@if (Config.TableExists("FORUM_IMAGE_COMMENT"))
+{
+    <div class="form-group">
+        <label for="Enabled" class="control-label col-xs-3">Image Comments</label>
+        <div class="col-xs-4 col-sm-1">
+            <input class="yesno-checkbox" id="Enabled" type="checkbox" name="Enabled" data-size="mini" checked="@(ClassicConfig.GetIntValue("INTIMGCOMMENT",0) == 1)" value="true" />
+        </div>
+        <div class="col-xs-4">
+            <p class="help-block">Allow member photo albums</p>
+        </div>
+    </div>
+}

@@ -1,0 +1,69 @@
+﻿@using PetaPoco
+@using SnitzCore.Extensions;
+@model PetaPoco.Page<PhotoAlbum.Models.AlbumList>
+
+@using (Html.BeginForm("Index", "PhotoAlbum"))
+{
+    <div>
+        @{
+            long pagecount = Model.TotalPages;
+            long page = Model.CurrentPage;
+            long intLow = page - 1;
+            long intHigh = page + 3;
+            if (intLow < 1)
+            {
+                intLow = 1;
+            }
+            if (intHigh > pagecount)
+            {
+                intHigh = pagecount;
+            }
+            if (intHigh - intLow < 5)
+            {
+                while ((intHigh < intLow + 4) && intHigh < pagecount)
+                {
+                    intHigh++;
+                }
+            }
+            if (intHigh - intLow < 5)
+            {
+                while ((intLow > intHigh - 4) && intLow > 1)
+                {
+                    intLow--;
+                }
+            }
+        }
+        @if (pagecount > 1)
+        {
+            <ul class="pager">
+                @if (page > 1)
+                {
+                    <li><span class="pager-link">@Html.ActionLink("<<", "Index", "PhotoAlbum", new { pagenum = 1, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy, term = ViewBag.SearchTerm }, htmlAttributes: null)</span></li>
+                    <li><span class="pager-link">@Html.ActionLink("<", "Index", "PhotoAlbum", new { pagenum = page - 1, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy, term = ViewBag.SearchTerm }, htmlAttributes: null)</span></li>
+                }
+
+
+                @for (long i = intLow; i < intHigh + 1; i++)
+                {
+                    if (i == page)
+                    {
+                        <li><span class="pager-link-current">@Html.ActionLink(i.ToLangNum() + "", "Index", "PhotoAlbum", new { pagenum = i, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy, term = ViewBag.SearchTerm }, htmlAttributes: null)</span></li>
+                    }
+                    else
+                    {
+                        <li><span class="pager-link">@Html.ActionLink(i.ToLangNum() + "", "Index", "PhotoAlbum", new { pagenum = i, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy, term = ViewBag.SearchTerm }, htmlAttributes: null)</span></li>
+                    }
+                }
+                @if (page < pagecount)
+                {
+                    <li><span class="pager-link">@Html.ActionLink(">", "Index", "PhotoAlbum", new { pagenum = page + 1, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy, term = ViewBag.SearchTerm }, htmlAttributes: null)</span></li>
+                    <li><span class="pager-link">@Html.ActionLink(">>", "Index", "PhotoAlbum", new { pagenum = pagecount, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy, term = ViewBag.SearchTerm }, htmlAttributes: null)</span></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p></p>
+        }
+    </div>
+}

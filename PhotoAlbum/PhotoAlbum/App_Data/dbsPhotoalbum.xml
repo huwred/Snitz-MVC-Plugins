@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Photo Album MOD" applied="false">
+  <Create>
+    <Table name="FORUM_IMAGES" idfield="I_ID">
+      <Column name="I_MID" type="int" allownulls="true" />
+      <Column name="I_LOC" type="varchar" size="255" allownulls="true" />
+      <Column name="I_DESC" type="varchar" size="100" allownulls="false" />
+      <Column name="I_WIDTH" type="int" allownulls="true" />
+      <Column name="I_HEIGHT" type="int" allownulls="true" />
+      <Column name="I_DATE" type="varchar" size="14" default="" allownulls="true" />
+      <Column name="I_SIZE" type="int" allownulls="true" />
+      <Column name="I_TYPE" type="varchar" size="255" allownulls="true" />
+      <Column name="I_VIEWS" type="int" default="0" allownulls="true" />
+      <Column name="I_CAT" type="int" default="0" allownulls="false" />
+      <Column name="I_GROUP_ID" type="int" default="0" allownulls="false" />
+      <Column name="I_SCIENTIFICNAME" type="varchar" size="100" allownulls="true" />
+      <Column name="I_NORWEGIANNAME" type="varchar" size="100" allownulls="true" />
+      <Column name="I_PRIVATE" type="bit" default="0" allownulls="false" />
+      <Column name="I_NOTFEATURED" type="bit" default="0" allownulls="false" />	  
+    </Table>
+    <Table name="FORUM_IMAGE_CAT" idfield="CAT_ID">
+      <Column name="MEMBER_ID" type="int" allownulls="false" />
+      <Column name="CAT_DESC" type="varchar" size="150" allownulls="true" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP" idfield="O_GROUP_ID">
+      <Column name="O_GROUP_NAME" type="varchar" size="100" allownulls="false" />
+      <Column name="O_GROUP_ORDER" type="int" default="0" allownulls="false" />
+    </Table>
+  </Create>
+  <Insert>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Birds" />
+      <Column name="O_GROUP_ORDER" type="int" value="0" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Insects" />
+      <Column name="O_GROUP_ORDER" type="int" value="1" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Fish" />
+      <Column name="O_GROUP_ORDER" type="int" value="2" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Amphibians Reptiles" />
+      <Column name="O_GROUP_ORDER" type="int" value="3" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Plants" />
+      <Column name="O_GROUP_ORDER" type="int" value="4" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Lichens" />
+      <Column name="O_GROUP_ORDER" type="int" value="5" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Fungi" />
+      <Column name="O_GROUP_ORDER" type="int" value="6" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Mammals" />
+      <Column name="O_GROUP_ORDER" type="int" value="7" />
+    </Table>
+    <Table name="FORUM_ORG_GROUP">
+      <Column name="O_GROUP_NAME" type="varchar" value="Others" />
+      <Column name="O_GROUP_ORDER" type="int" value="99" />
+    </Table>
+    <Table name="FORUM_CONFIG_NEW">
+      <Column name="C_VARIABLE" type="varchar" value="STRIMAGETYPES" />
+      <Column name="C_VALUE" type="varchar" value=".gif,.png,.jpg,.bmp" />
+    </Table>
+    <Table name="FORUM_CONFIG_NEW">
+      <Column name="C_VARIABLE" type="varchar" value="INTMAXIMAGESIZE" />
+      <Column name="C_VALUE" type="varchar" value="10" />
+    </Table>
+    <Table name="FORUM_CONFIG_NEW">
+      <Column name="C_VARIABLE" type="varchar" value="INTMAXTHUMBSIZE" />
+      <Column name="C_VALUE" type="varchar" value="240" />
+    </Table>
+    <Table name="FORUM_CONFIG_NEW">
+      <Column name="C_VARIABLE" type="varchar" value="STRTHUMBTYPE" />
+      <Column name="C_VALUE" type="varchar" value="scaled" />
+    </Table>    
+  </Insert>
+</Tables>

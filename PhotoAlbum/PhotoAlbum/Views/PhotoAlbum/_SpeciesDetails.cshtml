@@ -1,0 +1,118 @@
+﻿@using PetaPoco
+@using SnitzCore.Extensions
+@using SnitzDataModel.Extensions
+@using Snitz.Base
+@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+@model PhotoAlbum.ViewModels.SpeciesAlbum
+@{
+    string sortIcon = ViewBag.SortDir == "asc" ? "<i class=\"fa fa-sort-desc\"></i>" : "<i class=\"fa fa-sort-asc\"></i>";
+}
+
+
+<div class="table-responsive">
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr class="bg-primary">
+                    <th class="hidden-xs">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("Member","General"), "Album", new {  pagenum=ViewBag.Page, sortby="user", sortOrder = ViewBag.SortHead, showThumbs=Model.Thumbs,speciesOnly=Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "user")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    @if (ViewBag.ShowThumbs)
+                    {
+                        <th class="col-thumb">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblImage","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="file", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "file")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                        </th>
+                    }
+                    <th class="hidden-xs hidden-sm">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblForumcode","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="id", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "id")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    <th class="">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblScientificName","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="scientific", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "scientific")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    <th class="">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblLocalName","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="localname", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "localname")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    <th class="hidden-xs">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblDescription","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="desc", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "desc")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    <th class="hidden-xs hidden-sm">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblGroup","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="group", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "group")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    <th class="hidden-xs hidden-sm">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblDate","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="date", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "date")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th>
+                    <th class="hidden-xs hidden-sm">
+                        @Html.ActionLink( @ResourceManager.GetLocalisedString("lblViews","PhotoAlbum"), "Album", new {  pagenum=ViewBag.Page, sortby="views", sortOrder = ViewBag.SortHead, showThumbs = Model.Thumbs, speciesOnly = Model.SpeciesOnly })
+                        @if (ViewBag.SortBy == "views")
+                        {
+                            @Html.Raw(sortIcon)
+                        } 
+                    </th> 
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var photo in Model.Images)
+                {
+                    var imgUrl = Url.Content("~/" + photo.RootFolder + "/PhotoAlbum/thumbs/") + photo.ImageName;
+                    <tr>
+                        <td class="hidden-xs">@Html.ActionLink(photo.MemberName,"Member",new{id=photo.MemberName },new{title=ResourceManager.GetLocalisedString("tipViewMemberAlbum","PhotoAlbum"),data_toggle="tooltip"})</td>
+                        @if (ViewBag.ShowThumbs)
+                        {
+                            <td  class="col-thumb"><a class="view-gallery" target="_blank" href="@Url.Action("Gallery", new {id = photo.MemberName, photoid = photo.Id,pagenum=1, searchparams= @ViewBag.JsonParams })" title="@ResourceManager.GetLocalisedString("lblImage","PhotoAlbum") @photo.Id"><img src="@Html.ImageUrlFor(photo.Location,photo.Timestamp,true)"/></a></td>
+                        }
+                        <td class="hidden-xs hidden-sm">[image=@photo.Id]</td>
+                        <td class="">@photo.ScientificName</td>
+                        <td class="">@photo.CommonName</td>
+                        <td class="hidden-xs">@photo.Description</td>
+                        <td class="hidden-xs hidden-sm">@photo.GroupName</td>
+                        <td class="hidden-xs hidden-sm">@photo.Timestamp.ToSnitzDateTime().ToFormattedString()</td>
+                        <td class="hidden-xs hidden-sm">@photo.Views.ToLangNum()</td>
+
+                    </tr>
+                }
+                @if (!Model.Images.Any())
+                {
+                    var colspan = 8;
+                    if (ViewBag.ShowThumbs)
+                    {
+                        colspan = 9;
+                    }
+                    <tr class=""><td colspan="@colspan">@ResourceManager.GetLocalisedString("lblNoImg", "PhotoAlbum")</td></tr>
+                }
+            </tbody>
+        </table>
+
+</div>

@@ -1,0 +1,140 @@
+﻿@using System.Globalization;
+@using SnitzCore.Extensions
+@using SnitzDataModel.Extensions
+@using Snitz.Base
+@using PetaPoco
+@using LangResources.Utility
+@using MvcBreadCrumbs
+@using SnitzCore.Utility;
+@using SnitzConfig
+
+@model PetaPoco.Page<PhotoAlbum.Models.AlbumList>
+
+@{
+    ViewBag.Title = ResourceManager.GetLocalisedString("titleIndex", "PhotoAlbum");
+    string sortIcon = ViewBag.SortDir == "asc" ? "<i class=\"fa fa-sort-asc\"></i>" : "<i class=\"fa fa-sort-desc\"></i>";
+}
+@{
+    //check the culture so we can set the page direction and language
+    CultureInfo ci = SessionData.Get<CultureInfo>("Culture");
+    string clang = ci.TwoLetterISOLanguageName;
+    bool isRighToLeft = SessionData.Get<bool>("isRighToLeft");
+
+}
+@section styles{
+    @Html.Raw(Config.ThemeCss("plugincss/photoalbum.min.css"))
+    <style>
+
+        .modal-content {
+            max-width: 600px !important;
+            margin: 30px auto !important;
+        }
+    </style>
+
+}
+@section breadcrumb
+{
+    @Html.Raw(BreadCrumb.Display())
+}
+
+@section sidebox
+{
+    @if (ClassicConfig.GetIntValue("INTFEATUREDPHOTO") == 1)
+    {
+        <div class="side-box" id="fimage">@Html.Action("FeaturedImage")</div>
+    }
+}
+<h5>
+    @ResourceManager.GetLocalisedString("h5Index", "PhotoAlbum") @if (User.Identity.IsAuthenticated)
+    {@Html.ActionLink(" ", "UploadFile", "PhotoAlbum", null, new { @class = "gallery-link pull-right fa fa-upload fa-1_5x", title = ResourceManager.GetLocalisedString("lblUpload", "PhotoAlbum"), data_toggle = "tooltip" })}
+</h5>
+<hr class="title" />
+<div class="container-fluid">
+    <div class="col-md-8">
+        <div class="form-group">
+            <div class="col-xs-4">
+                <form action="@Url.Action("Index","PhotoAlbum",new{pagenum = ViewBag.Page, sortOrder = ViewBag.SortDir, sortCol = ViewBag.SortBy })" method="post">
+                    <div class="input-group">
+                        <input name="term" id="term" class="form-control" type="text" placeholder="@ResourceManager.GetLocalisedString("lblUserFilter","PhotoAlbum")" value="@ViewBag.SearchTerm">
+                        <span class="input-group-btn">
+                            <button class="btn btn-info" type="submit"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                    <div class="form-group">
+                        @Html.ValidationSummary(false, "", new { @class = "list-group-item-info" })
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="row">
+            @Html.Partial("_AlbumPager", Model)
+        </div>
+        <table class="table table-bordered table-condensed table-striped" lang="@clang" dir="@(isRighToLeft ?  "rtl" : "ltr" )">
+            <thead>
+                <tr class="bg-primary">
+                    <th>
+                        @Html.ActionLink(ResourceManager.GetLocalisedString("Member", "General"), "Index", new { pagenum = ViewBag.Page, sortOrder = ViewBag.SortUser, sortCol = "user" })
+                        @if (ViewBag.SortBy == "user")
+                        {
+                            @Html.Raw(sortIcon)
+                        }
+                    </th>
+                    <th>
+                        @Html.ActionLink(ResourceManager.GetLocalisedString("lblImages", "PhotoAlbum"), "Index", new { pagenum = ViewBag.Page, sortOrder = ViewBag.SortCount, sortCol = "count" })
+                        @if (ViewBag.SortBy == "count")
+                        {
+                            @Html.Raw(sortIcon)
+                        }
+                    </th>
+                    <th>
+                        @Html.ActionLink(ResourceManager.GetLocalisedString("lblLastPhoto", "PhotoAlbum"), "Index", new { pagenum = ViewBag.Page, sortOrder = ViewBag.SortDate, sortCol = "date" })
+                        @if (ViewBag.SortBy == "date")
+                        {
+                            @Html.Raw(sortIcon)
+                        }
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var album in Model.Items)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(album.Username, "Member", new { id = album.Username, sortby = "date", sortorder = "desc" })</td>
+                        <td>@album.imgCount.ToLangNum()</td>
+                        <td>@album.imgLastUpload.ToSnitzDateTime().ToClientTime().ToFormattedString()</td>
+                    </tr>
+
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">@Model.CurrentPage.ToLangNum() of @Model.TotalPages.ToLangNum()</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+<div id="modal-gallery-upload" class="modal fade"
+     tabindex="-1" role="dialog">
+    <div class="modal-content">
+    </div>
+</div>
+@section scripts
+{
+
+    <script type="text/javascript" src="~/Scripts/dropzone.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/snitz.gallery.upload.min.js"></script>
+    <script>
+        $(document)
+            .ready(function () {
+                try {
+                    Dropzone.autoDiscover = false;
+                } catch (e) {
+                    console.log(Snitzres.DZNotLoaded);
+                }
+            });
+    </script>
+
+}

@@ -1,0 +1,281 @@
+﻿@using SnitzConfig
+@using LangResources.Utility
+@using MvcBreadCrumbs
+@using PhotoAlbum.Views.Helpers
+
+@model System.Collections.Generic.List<PhotoAlbum.Models.AlbumImage>
+
+@{
+    ViewBag.Title = String.Format(ResourceManager.GetLocalisedString("lblAlbum", "PhotoAlbum"), ViewBag.Username);
+    
+}
+@section styles{
+
+    <link rel="stylesheet" href="~/Content/plugincss/bjqs.min.css">
+    <link rel="stylesheet" href="~/Content/plugincss/jquery.contextMenu.min.css">
+    @Html.Raw(Config.ThemeCss("plugincss/photoalbum.min.css"))
+    <style>
+        .modal-content {
+            max-width: 800px !important;
+            margin: 30px auto !important;
+        }
+        #SlideshowImages {
+            width: 100%;
+            height: 85%;
+            max-height: 85%;
+            display: block;
+        }
+        td:first-child + td + td, td:first-child + td + td + td { /* third column, fourth column */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+
+}
+@section breadcrumb
+{
+    @Html.Raw(BreadCrumb.Display())
+}
+
+<h5>
+    @String.Format(ResourceManager.GetLocalisedString("lblAlbum", "PhotoAlbum"), ViewBag.Username)
+@if (User.Identity.IsAuthenticated && ViewBag.IsOwner)
+{@Html.ActionLink(" ", "UploadFile", "PhotoAlbum", null, new { @class = "gallery-link pull-right fa fa-upload fa-1_5x", title = ResourceManager.GetLocalisedString("lblUpload", "PhotoAlbum"), data_toggle = "tooltip" })}
+</h5>
+<hr class="title" />
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="col-md-6">
+                @using (Ajax.BeginForm("MemberImages", new { id = ViewBag.Username }, new AjaxOptions()
+                {
+                    UpdateTargetId = "ImageContainer",
+                    InsertionMode = InsertionMode.Replace,
+                    OnSuccess = "refreshsort",
+                    HttpMethod = "POST"
+                }))
+                {
+                    <div class="input-group">
+                        <input type="text" value='@ViewBag.Display' name="display" id="display-template" style="display: none;" />
+                        <span class="input-group-btn">
+                            <select class="form-control" id="album-sortby" name="SortBy">
+                                <option value="id"
+                                        @if (ViewBag.SortBy == "id") { @Html.Raw("selected") }>
+                                    @ResourceManager.GetLocalisedString("optSortId")
+                                </option>
+                                <option value="date"
+                                        @if (ViewBag.SortBy == "date") { @Html.Raw("selected") }>
+                                    @ResourceManager.GetLocalisedString("optSortDate")
+                                </option>
+                                <option value="desc"
+                                        @if (ViewBag.SortBy == "desc") { @Html.Raw("selected") }>
+                                    @ResourceManager.GetLocalisedString("optSortDesc")
+                                </option>
+                                <option value="file"
+                                        @if (ViewBag.SortBy == "file") { @Html.Raw("selected") }>
+                                    @ResourceManager.GetLocalisedString("optSortFile")
+                                </option>
+                            </select>
+                        </span>
+                        <span class="input-group-btn">
+                            <select class="form-control" name="SortOrder" id="album-sortdesc">
+                                <option value="desc"
+                                        @if (ViewBag.SortDir.ToLower() == "desc") { @Html.Raw("selected") }>
+                                    @ResourceManager.GetLocalisedString("optDesc", "Controls")
+                                </option>
+                                <option value="asc"
+                                        @if (ViewBag.SortDir.ToLower() == "asc") { @Html.Raw("selected") }>
+                                    @ResourceManager.GetLocalisedString("optAsc", "Controls")
+                                </option>
+                            </select>
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-xs-6 text-right view-select">
+            @Ajax.RawActionLink("<li class='fa fa-th'></li>", "MemberImages", new { id = ViewBag.Username, display = 0, pagenum = 1 }, new AjaxOptions()
+       {
+           UpdateTargetId = "ImageContainer",
+           InsertionMode = InsertionMode.Replace,
+           OnSuccess = "refreshlazyload",
+           HttpMethod = "GET"
+       }, new { data_toggle = "tooltip" })
+            @Ajax.RawActionLink("<li class='fa fa-align-justify'></li>", "MemberImages", new { id = ViewBag.Username, display = 2, pagenum = 1 }, new AjaxOptions()
+       {
+           UpdateTargetId = "ImageContainer",
+           InsertionMode = InsertionMode.Replace,
+           OnSuccess = "refreshlazyload",
+                HttpMethod = "GET"
+       }, new { data_toggle = "tooltip" })
+            @Ajax.RawActionLink("<li class='fa fa-list'></li>", "MemberImages", new { id = ViewBag.Username, display = 1, pagenum = 1 }, new AjaxOptions()
+       {
+           UpdateTargetId = "ImageContainer",
+           InsertionMode = InsertionMode.Replace,
+           OnSuccess = "refreshlazyload",
+           HttpMethod = "GET"
+       }, new { data_toggle = "tooltip" })
+            @Ajax.RawActionLink("<li class='fa fa-film'></li>", "MemberSlideShow", new { id = ViewBag.Username, display = 3, pagenum = 1 }, new AjaxOptions()
+       {
+           UpdateTargetId = "ImageContainer",
+           InsertionMode = InsertionMode.Replace,
+           OnSuccess = "refreshlazyload",
+           HttpMethod = "GET"
+       }, new { data_toggle = "tooltip" })
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <input type="hidden" value="@ViewBag.Display" id="display-type" />
+    <input id="lastPageID" type="hidden" value="@((int)ViewBag.Page + 1)" />
+    <div class="row-fluid" id="ImageContainer">
+
+        @Html.Partial("MemberImages")
+        <br />
+        <div style="clear: both;">
+        </div>
+        <div class="clearfix">
+        </div>
+
+    </div>
+
+    <div class="row text-center album-copyright">
+        @Html.Raw(String.Format(ResourceManager.GetLocalisedString("lblMemberCopy"), "<a href='" + Url.Action("UserProfile", "Account", new { id = ViewBag.Username }, null) + "'>" + ViewBag.Username + "</a>"))
+    </div>
+</div>
+<input type="hidden" id="json-data" value="@ViewBag.JsonParams" />
+<div id="modal-gallery-upload" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-content" id="modal-upload-container"></div>
+</div>
+
+@section scripts
+{
+
+    <script type="text/javascript" src="~/Scripts/dropzone.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/jquery.ui.position.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/jquery.contextMenu.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/snitz.gallery.upload.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/pluginjs/snitz.photoalbum.min.js"></script>
+
+    <script>
+        var disp1 = $('#display-template').val();
+        var pagecount = '@ViewBag.PageCount';
+        var lastpage = 1;
+        var pagenum = 1;
+        var timing = 10000;
+        var imgTimeout = null;
+
+            var scrollFunction = function(){
+                var mostOfTheWayDown = ($(document).height() - 200);
+                disp1 = $('#display-template').val();
+                
+                if (disp1 === '0' && $(window).scrollTop() + $(window).height() >= mostOfTheWayDown) {
+                    $(window).unbind('scroll');
+                    pagenum = parseInt($('input#lastPageID').val()) + 1;
+
+                    if (pagenum <= parseInt(pagecount) && pagenum !== lastpage) {
+                        lastpage = pagenum;
+                        var url = '@Url.Action("MemberImages", "PhotoAlbum", new {id = ViewBag.Username, mid = ViewBag.MemberId, display = ViewBag.Display, sortby = ViewBag.SortBy, sortOrder = ViewBag.SortPage})' + "&pagenum=" + pagenum;
+
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            success: function(response) {
+                                lastpage = pagenum;
+                                $('#display-type').val($('.viewbag-diplay').data('val'));
+                                $('div#ImageContainer').append(response);
+                                $('input#lastPageID').val(pagenum);
+                                $(window).bind('scroll',scrollFunction);
+                            },
+                            error: function(xhr, textStatus, error) {
+                                console.log(xhr.statusText);
+                                console.log(textStatus);
+                                console.log(error);
+                                $.fallr('show',
+                                    {
+                                        content: 'Request Sending Failed! Try Again after few minutes.'
+                                    });
+                            }
+                        });
+                    }
+                }
+            };
+        $(document).ready(function() {
+            
+            $(window).bind('scroll', scrollFunction);
+
+            try {
+                Dropzone.autoDiscover = false;
+            } catch (e) {
+                console.log(Snitzres.DZNotLoaded);
+            }
+            $('.view-select a').on('click',
+                function() {
+
+                    $('.view-select a').removeClass('selected');
+                    $(this).addClass('selected');
+
+                });
+
+        });
+
+        var refreshlazyload = function () {
+            var disp = $('.viewbag-diplay').data('val');
+            $('#display-template').val(disp);
+
+            $(window).unbind("scroll");
+            if (disp === 0) {
+                pagenum = 1;
+                lastpage = 1;
+                $('input#lastPageID').val(pagenum);
+                $(window).bind('scroll',scrollFunction);
+            }
+            window.lazyload();
+        };
+
+        function refreshsort(data) {
+            var disp = $('.viewbag-diplay').data('val');
+            $('#display-template').val(disp);
+            lazyload();
+        };
+
+        function loop() {
+            var idx = $('#galleryImage').data("id") + 1;
+            var searchdata = $("#json-data").val();
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Next", "PhotoAlbum")' +
+                    '/' +
+                    idx +
+                    '?member=' +
+                    $('#galleryImage').data("user") +
+                    '&searchparams=' +
+                    searchdata,
+                success: function(data) {
+                    $('#galleryImage').fadeOut(500,
+                        function() {
+                            $('#galleryImage').attr('src', data.src);
+                            $('#galleryImage').fadeIn(500);
+                        });
+                    $('#galleryImage').data("id", data.idx);
+                    $('#galleryImageLbl').html(data.title);
+                    $('#galleryImageFooterLbl').html(data.desc);
+                    if (timing > 0) {
+                        imgTimeout = window.setTimeout(loop, timing);
+                    }
+                },
+                error: function(error) {
+                    clearTimeout(imgTimeout);
+                    BootstrapDialog.alert({
+                        title: Snitzres.ErrTitle,
+                        message: error
+                    });
+                }
+            });
+
+        }
+
+    </script>
+}
+

@@ -1,0 +1,34 @@
+﻿@model System.Collections.Generic.List<PhotoAlbum.Models.AlbumImage>
+@{
+    int dispstyle = (int)ViewBag.Display;
+}
+
+@if (dispstyle == 1 || dispstyle == 2 || dispstyle == 3)
+{
+    <div class="row">
+        @Html.Partial("_ImagePager", Model)
+    </div>
+}
+@switch ((int)ViewBag.Display)
+{
+    case 1:
+        @Html.Partial("_MemberDetails")
+        break;
+    case 2:
+        @Html.Partial("_MemberList")
+        break;
+    case 3:
+        @Html.Action("MemberSlideShow", new { id = ViewBag.Username, searchparams = ViewBag.JsonParams })
+        break;
+    default:
+        @Html.Partial("_MemberThumbs")
+        break;
+}
+@if (dispstyle == 1 || dispstyle == 2 || dispstyle == 3)
+{
+    <div class="row">
+        @Html.Partial("_ImagePager", Model)
+    </div>
+
+}    <span class="viewbag-diplay" data-val="@dispstyle">&nbsp;</span>
+

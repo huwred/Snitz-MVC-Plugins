@@ -1,0 +1,150 @@
+﻿@using SnitzDataModel.Extensions
+@using SnitzCore.Extensions
+@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+@using Snitz.Base
+
+@model List<PhotoAlbum.Models.AlbumImage>
+@{
+    ViewBag.IsOwner = true;
+    string sortIcon = ViewBag.SortDir == "asc" ? "<i class=\"fa fa-sort-desc\"></i>" : "<i class=\"fa fa-sort-asc\"></i>";
+}
+
+<input type="checkbox" id="showhidethumbs" checked /> @ResourceManager.GetLocalisedString("lblShowThumbnails", "PhotoAlbum")
+<div class="table-responsive">
+    <table class="table table-bordered table-striped member-details">
+        <thead>
+            <tr class="bg-primary">
+                <th class="col-thumb">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum"), "Album", new { pagenum = ViewBag.Page, sortby = "file", display = 1, sortOrder = ViewBag.SortHead })
+                    @if (ViewBag.SortBy == "file")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+                </th>
+                <th class="hidden-xs col-sm-1">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblForumcode", "PhotoAlbum"), "Member", new { pagenum = ViewBag.Page, sortby = "id", display = 1, sortOrder = ViewBag.SortHead })
+                    @if (ViewBag.SortBy == "id")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+                </th>
+                <th class="col-xs-2">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblDescription", "PhotoAlbum"), "Member", new { pagenum = ViewBag.Page, sortby = "desc", display = 1, sortOrder = ViewBag.SortHead })
+                    @if (ViewBag.SortBy == "desc")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+
+                </th>
+                <th class="col-xs-2">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum"), "Member", new { pagenum = ViewBag.Page, sortby = "file", display = 1, sortOrder = ViewBag.SortHead })
+                    @if (ViewBag.SortBy == "file")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+                </th>
+                <th class="hidden-xs hidden-sm col-md-1">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblDate", "PhotoAlbum"), "Member", new { pagenum = ViewBag.Page, sortby = "date", display = 1, sortOrder = ViewBag.SortHead })
+                    @if (ViewBag.SortBy == "date")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+                </th>
+                <th class="col-xs-1">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblViews", "PhotoAlbum"), "Member", new { pagenum = ViewBag.Page, sortby = "views", display = 1, sortOrder = ViewBag.SortHead })
+
+                    @if (ViewBag.SortBy == "views")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+                </th>
+                <th class="col-xs-1 hidden-xs">@ResourceManager.GetLocalisedString("lblDimensions", "PhotoAlbum")</th>
+                <th class="col-xs-1 hidden-xs">
+                    @Html.ActionLink(@ResourceManager.GetLocalisedString("lblSize", "PhotoAlbum"), "Member", new { pagenum = ViewBag.Page, sortby = "size", display = 1, sortOrder = ViewBag.SortHead })
+                    @if (ViewBag.SortBy == "size")
+                    {
+                        @Html.Raw(sortIcon)
+                    }
+                </th>
+                @if (ViewBag.IsOwner)
+                {
+                    <th class="col-xs-1">
+                        <i class="delButton fa fa-trash-o" title="@ResourceManager.GetLocalisedString("tipDelImages", "PhotoAlbum")" style="cursor: pointer" data-toggle="tooltip"></i>
+                        <input type="checkbox" id="checkAll" />
+                    </th>
+                }
+            </tr>
+        </thead>
+        @using (Html.BeginForm("DeleteImages", "PhotoAlbum", FormMethod.Post, new { id = "delForm" }))
+        {
+        <tbody>
+            @foreach (var photo in Model)
+            {
+                var imgUrl = Url.Content("~/") + photo.RootFolder + "/PhotoAlbum/thumbs/" + photo.ImageName;
+                <tr>
+                    <td class="col-thumb">
+                        <a class="view-gallery" target="_blank" href="@Url.Action("Gallery", new {id = photo.MemberName, photoid = photo.Id, pagenum = 1, searchparams = ViewBag.JsonParams})" title="@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum") @photo.Id">
+                            <img class="lazyload" data-src="@Html.ImageUrlFor(photo.Location, photo.Timestamp, true)"/>
+                        </a>
+                    </td>
+                    <td class="hidden-xs">[image=@photo.Id]</td>
+                    <td>@photo.Description</td>
+                    <td><a class="view-gallery" href="@Url.Action("Gallery", new {id = photo.MemberName, photoid = photo.Id,pagenum=1, searchparams= ViewBag.JsonParams})" title="@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum") @photo.Id">@photo.Location</a></td>
+                    <td>@photo.Timestamp.ToSnitzDateTime().ToFormattedString()</td>
+                    <td>@photo.Views.ToLangNum()</td>
+                    <td class="hidden-xs">@photo.Width x @photo.Height</td>
+                    <td class="hidden-xs">@photo.Size</td>
+                    @if (ViewBag.IsOwner)
+                    {
+                        <td>
+                            @if (photo.IsPrivate)
+                            {
+                                @Html.ActionLinkConfirm(ResourceManager.GetLocalisedString("imgPrivate", "PhotoAlbum"), "TogglePrivacy", "PhotoAlbum", new { id = photo.Id, state = false }, "fa fa-user-secret")
+                            }
+                            else
+                            {
+                                @Html.ActionLinkConfirm(ResourceManager.GetLocalisedString("imgPrivate", "PhotoAlbum"), "TogglePrivacy", "PhotoAlbum", new { id = photo.Id, state = true }, "fa fa-user-o")
+                            }
+                            @if (photo.DoNotFeature)
+                            {
+                                @Html.ActionLinkConfirm(ResourceManager.GetLocalisedString("imgFeature", "PhotoAlbum"), "ToggleDoNotFeature", "PhotoAlbum", new { id = photo.Id, state = false }, "fa fa-square-o")
+                            }
+                            else
+                            {
+                                @Html.ActionLinkConfirm(ResourceManager.GetLocalisedString("imgFeature", "PhotoAlbum"), "ToggleDoNotFeature", "PhotoAlbum", new { id = photo.Id, state = true }, "fa fa-picture-o")
+                            }
+                            <a href="@Url.Action("Edit", new {id = photo.Id})" class="gallery-link" title="@ResourceManager.GetLocalisedString("tipEditImage", "PhotoAlbum")" data-toggle="tooltip"><i class="fa fa-pencil-square-o"></i></a>
+                            @Html.ActionLinkConfirm(ResourceManager.GetLocalisedString("tipDelImage", "PhotoAlbum"), "Delete", "PhotoAlbum", new { id = photo.Id }, "fa fa-trash-o")
+                            <input type="checkbox" class="thumb" name="imgDelete" data-img="@photo.Location" value="@photo.Id" />
+                        </td>
+                    }
+                </tr>
+
+            }
+            @if (!Model.Any())
+            {
+                var colspan = 8;
+                if (ViewBag.ShowThumbs)
+                {
+                    colspan = 9;
+                }
+                <tr class=""><td colspan="@colspan">@ResourceManager.GetLocalisedString("lblNoImg", "PhotoAlbum")</td></tr>
+            }
+        </tbody>
+            if (User.Identity.IsAuthenticated && ViewBag.IsOwner)
+            {
+                <tfoot>
+                    <tr>
+                        <td colspan="6"></td>
+                        <td>
+                            <input type="button" id="delete_button" style="display:none" class="btn btn-primary" value="Delete Images" />
+                        </td>
+                    </tr>
+                </tfoot>
+            }
+        }
+
+    </table>
+
+</div>

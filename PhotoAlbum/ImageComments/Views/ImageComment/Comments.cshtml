@@ -1,0 +1,61 @@
+﻿@using BbCodeFormatter
+@using ImageComments.Models
+@using SnitzCore.Extensions
+@using SnitzDataModel.Extensions
+@using LangResources.Utility;
+@using WebSecurity = SnitzMembership.WebSecurity
+
+
+@model List<ImageComments.Models.ImageComment>
+    @{
+        Layout = "~/Views/Shared/_LayoutNoMenu.cshtml";
+        ViewBag.Title = ResourceManager.GetLocalisedString("lblImgComments", "PhotoAlbum"); //"Image Comments";
+    }
+    <div class="container-fluid text-center">
+        @if (ViewBag.NewPost == null)
+        {
+            using (Html.BeginForm("AddComment", "ImageComment", FormMethod.Post, new { role = "form", id = "addCommentForm" }))
+            {
+                <div class="col-xs-4">
+                    <img id="img_@ViewBag.ImageId" src="@Html.Action("GetImageUrl","PhotoAlbum", new{id=ViewBag.ImageId})" />
+                </div>
+
+                <div class="form-horizontal col-xs-8">
+                    <input type="hidden" name="ImageId" value="@ViewBag.ImageId" />
+                    <div class="form-group">
+                        <div class="col-sm-9">
+                            <label class="control-label" for="Comment">@ResourceManager.GetLocalisedString("lblComment", "PhotoAlbum"): </label>
+                            <textarea class="form-control" id="Comment" name="Comment" rows="4" maxlength="500"></textarea>
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-sm btn-success">@ResourceManager.GetLocalisedString("lblSubmit", "PhotoAlbum")</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <hr class="modal-title" />
+
+        }
+        @if (Model.Count == 0)
+        {
+            <div class="row-fluid text-center">@ResourceManager.GetLocalisedString("lblNoComments", "PhotoAlbum")</div>
+        }
+        else
+        {
+            <div class="row-fluid text-left">
+                <dl class="col-sm-8 col-sm-offset-4 img-comment">
+                    @foreach (ImageComment comment in Model)
+                    {
+                        <dt>
+                            @comment.PostedBy @comment.PostedOn.ToClientTime().ToFormattedString()
+                            @if (comment.MemberId == WebSecurity.CurrentUserId || ViewBag.AuthorId == WebSecurity.CurrentUserId || User.IsAdministrator())
+                            {
+                                <span class="pull-right flip"><a href="@Url.Action("DelComment", "ImageComment", new {id = comment.Id, imgid= comment.ImageId})" class="del-comment" title="Delete Comment" data-toggle="tooltip"><i class="fa fa-trash fa-1_5x"></i></a></span>
+                            }
+                        </dt>
+                        <dd>@Html.Raw(BbCodeProcessor.Format(comment.Comment, false))</dd>
+                    }
+                </dl>
+            </div>
+        }
+    </div>

@@ -1,0 +1,27 @@
+﻿
+@using SnitzDataModel.Extensions
+@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+@model PhotoAlbum.Models.AlbumImage
+@{
+    Layout = null;
+
+}
+<div id="featured-image-div">
+    <div class="panel panel-primary">
+        <div class="panel-heading">@ResourceManager.GetLocalisedString("lblFeaturedImage","PhotoAlbum"): <small>@Model.Description</small></div>
+        <div class="panel-body">
+            <a href='@Url.Action("GetFeaturedImage",new{id=Model.Id})' target="_blank"><img src="@Html.ImageUrlFor(Model.Location,Model.Timestamp)" @*style="visibility: hidden"*@ alt="[Image=@Model.Id]" id="featured-img" /></a>
+            <div class="featured-img-overlay">
+                <ul class="list-unstyled small">
+                    <li>@ResourceManager.GetLocalisedString("tipImage", "ToolTip") [Image=@Model.Id]</li>
+                    <li>@ResourceManager.GetLocalisedString("lblScientificName","PhotoAlbum"): @Model.ScientificName</li>
+                    <li>@ResourceManager.GetLocalisedString("lblLocalName","PhotoAlbum"): @Model.CommonName</li>
+                    <li>@ResourceManager.GetLocalisedString("lblFileName", "PhotoAlbum"): @Model.Location</li>
+                    <li>@ResourceManager.GetLocalisedString("lblOwner", "PhotoAlbum"): @Model.MemberName</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>

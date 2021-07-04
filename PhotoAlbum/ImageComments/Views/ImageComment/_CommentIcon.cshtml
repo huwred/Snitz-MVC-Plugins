@@ -1,0 +1,16 @@
+﻿@using WebSecurity = SnitzMembership.WebSecurity
+@using LangResources.Utility;
+
+@model int
+
+
+@if (ViewBag.Comments == ResourceManager.GetLocalisedString("lblYes", "labels"))
+{
+    <a href="@Url.Action("Comments","ImageComment", new {id = Model, pagenum = 1})" title="@ResourceManager.GetLocalisedString("viewComment","PhotoAlbum")" data-toggle="tooltip" class="image-comment"><i class="fa fa-comments-o fa-1_5x"></i></a>
+
+}
+else //if(WebSecurity.CurrentUserId != ViewBag.AuthorId)
+{
+    <a href="@Url.Action("Comments","ImageComment", new {id = Model, pagenum = 1})" title="@ResourceManager.GetLocalisedString("addComment","PhotoAlbum")" data-toggle="tooltip" class="image-comment"><i class="fa fa-comment-o fa-1_5x"></i></a>
+
+}

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Image Comments plugin" applied="false">
+  <Create>
+    <Table name="FORUM_IMAGE_COMMENT" idfield="I_ID">
+      <Column name="I_MEMBERID" type="int" allownulls="false" />
+      <Column name="I_IMGID" type="int" allownulls="false" />
+      <Column name="I_DATE" type="varchar" size="14" allownulls="false" />
+      <Column name="I_RATING" type="int" default="0" allownulls="false" /> 
+      <Column name="I_COMMENT" type="varchar" size="500" allownulls="false" />
+    </Table>
+  </Create>
+  <Insert>
+    <Table name="FORUM_CONFIG_NEW">
+      <Column name="C_VARIABLE" type="varchar" value="INTIMGCOMMENT" />
+      <Column name="C_VALUE" type="varchar" value="1" />
+    </Table>    
+  </Insert>
+</Tables>

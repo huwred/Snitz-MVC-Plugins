@@ -1,0 +1,64 @@
+﻿@using SnitzDataModel.Extensions
+@using SnitzConfig
+@using LangResources.Utility
+@using PhotoAlbum.Views.Helpers
+@model List<PhotoAlbum.Models.AlbumImage>
+
+@using (Html.BeginForm("DeleteImages", "PhotoAlbum", FormMethod.Post, new { id = "delForm" }))
+{
+    int counter = 0;
+
+<div class="thumbrow">
+    @foreach (var photo in Model)
+    {
+        var imgClass = photo.IsPrivate ? "private-image lazyload" : "lazyload";
+        counter += 1;
+
+        var array = new[] { photo.ScientificName, photo.CommonName, photo.Description };
+        string imgTitle = string.Join(", ", array.Where(s => !string.IsNullOrEmpty(s)));
+
+        if (ViewBag.IsOwner)
+        {
+            imgClass += " target";
+        }
+        @*<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 pull-left" style="margin: 6px; max-width: 240px;">*@
+    <div class="thumbcol" id="@counter">
+        <div class="thumb-container">
+            <div class="thumb-content">
+                <a class="view-gallery" target="_blank" href="@Url.Action("Gallery", new {id = photo.MemberName, photoid = photo.Id, pagenum = 1, searchparams = ViewBag.JsonParams})" title="@ResourceManager.GetLocalisedString("lblImage", "PhotoAlbum") @photo.Id">
+                    <img class="@imgClass" id="img_@photo.Id" data-src="@Html.ImageUrlFor(photo.Location, photo.Timestamp, true)" />
+                </a>
+                <div class="small" title="@imgTitle">
+
+                    @if (!String.IsNullOrWhiteSpace(photo.ScientificName))
+                    {
+                        <i>@photo.ScientificName</i>
+                        if (!String.IsNullOrWhiteSpace(photo.CommonName))
+                        {
+                            @Html.Raw(",")
+                        }
+                    }
+                    @if (!String.IsNullOrWhiteSpace(photo.CommonName))
+                    {
+                        @photo.CommonName<br />
+                    }
+
+                    @photo.Description
+                    @if (!photo.IsPrivate && ClassicConfig.GetIntValue("INTIMGCOMMENT") == 1)
+                    {
+                        @Html.Action("ShowComments", "ImageComment", new { id = photo.Id })
+                    }
+                    <br />
+                    [image=@photo.Id]
+                </div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+        }
+        
+    </div>
+    }
+

@@ -1,0 +1,399 @@
+﻿@using System.Globalization
+@using LangResources.Utility
+@using SnitzConfig
+@using SnitzCore.Filter
+@using SnitzCore.Utility
+@using WWW.Filters
+@using WWW.Views.Helpers
+@{
+    //check the culture so we can set the page direction and language
+    CultureInfo ci = SessionData.Get<CultureInfo>("Culture");
+    string clang = ci.TwoLetterISOLanguageName;
+
+    string[] rtlLangs = new string[] { "ar", "arc", "dv", "fa", "ha", "khw", "ks", "ku", "ps", "ur", "yi", "he" };
+    string[] arabic = new string[] { "ar", "arc", "dv", "fa", "ha", "khw", "ks", "ku", "ps", "ur" }; //Cairo
+    string[] aramaic = new string[] { "yi", "he" }; //Tinos
+
+    bool isRighToLeft = (rtlLangs.Contains(clang));
+
+    if (!SessionData.Contains("isRighToLeft") || isRighToLeft != SessionData.Get<bool>("isRighToLeft"))
+    {
+        SessionData.Set("isRighToLeft", isRighToLeft);
+    }
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#" lang="@clang" dir="@(isRighToLeft ?  "rtl" : "ltr" )">
+<head>
+    <meta charset="utf-8" />
+    @*<meta http-equiv="X-UA-Compatible" content="IE=edge">*@
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    @RenderSection("pageMeta", required: false)
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for @Html.Raw(Config.ForumTitle)" href="~/RssFeed/Active" />
+    @Html.Raw(Config.ThemeCss("bootstrap.min.css"))
+    @Styles.Render("~/Content/css")
+
+    @if (isRighToLeft)
+    {
+        <!-- Load the default rtl css file -->
+        <link href="~/Content/bootstrap-rtl.min.css" rel="stylesheet">
+        @Html.Raw(Config.ThemeCss("snitz.css"))
+        @Html.Raw(Config.ThemeCss("snitz-rtl.css"))
+    }
+    else
+    {
+        @Html.Raw(Config.ThemeCss("snitz.css"))
+    }
+
+
+    @if (ClassicConfig.GetIntValue("STRPHOTOALBUM") == 1)
+    {
+        @Html.Raw(Config.ThemeCss("photoalbum.min.css"))
+    }
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/oldIEBrowsersSupport")
+    <![endif]-->
+    <script src="~/JavaScriptSettings"></script>
+
+
+
+    @RenderSection("styles", required: false)
+    @if (isRighToLeft)
+    {
+        @Styles.Render("~/Content/fullcalendar-rtl.css")
+    }
+
+    <!-- generate css classes for column layout -->
+    @{
+        //get the default column layout
+        var colLayout = ClassicConfig.GetValue("STRLAYOUT");
+
+        //classes for maincontent window
+        var contentClass = "col-xs-12 col-md-8 col-lg-9 padding-xs";
+        //class for second column: default right side
+        var colClass = "col-xs-12 col-md-4 col-lg-3";
+        //class for third column: default hidden
+        var thirdcolClass = "hidden";
+
+        if (colLayout == "left") // move second column to left side
+        {
+            contentClass += " col-md-push-4 col-lg-push-3";
+            colClass += " col-md-pull-8 col-lg-pull-9";
+        }
+        if (colLayout == "threecol")
+        {
+            contentClass = "col-xs-12 col-sm-8 col-lg-6 padding-xs";
+            colClass = "col-xs-12 col-sm-4 col-lg-3";
+            thirdcolClass = " hidden-xs hidden-sm hidden-md col-lg-3";
+        }
+        if (colLayout == "single")
+        {
+            contentClass = "col-xs-12";
+        }
+    }
+</head>
+<body id="page-top" onload="setStyleFromCookie(); ">
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-default navbar-fixed-top " role="navigation">
+        <div class="container navbar-test">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <span class="navbar-brand form-inline"><a href="@Config.ForumUrl" data-toggle="tooltip" data-placement="bottom" title="@Html.Raw(Config.ForumTitle??ClassicConfig.ForumTitle)">@Html.ForumLogo()</a></span>
+
+            </div>
+            <div class="collapse navbar-collapse">
+                @if (!SessionData.Contains("SnitzMenu"))
+                {
+                    SessionData.Set("SnitzMenu", Html.Partial("~/Views/Shared/_Menu.cshtml"));
+                }
+                @Session["SnitzMenu"]
+
+                <div id="pm-notify" style="vertical-align:middle">
+                    @{ Html.RenderPartial("_PMNotify"); }
+                </div>
+            </div><!--/.nav-collapse -->
+
+
+        </div><iframe id="fake" src="about:blank"></iframe>
+    </div>
+    <noscript>
+        <div class="alert">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Warning!</strong> Please enable JavaScript in your browser!
+        </div>
+    </noscript>
+    <!-- Begin page content -->
+    <main class="container-fluid persian" id="page-content">
+        @if (CookieConsent.AskCookieConsent(ViewContext))
+        {
+            Html.RenderPartial("_CookieConsentMessage");
+        }
+        @if (IsSectionDefined("breadcrumb"))
+        {
+            <div class="row-fluid">
+                <div class="breadcrumb col-xs-10 col-sm-8 col-md-9">
+                    @RenderSection("breadcrumb", required: false)
+
+                </div>
+                <div class="hidden-xs col-sm-4 col-md-3">@{ Html.RenderPartial("_LoginPartial"); }</div>
+            </div>
+        }
+        else
+        {
+            Html.RenderPartial("_LoginPartial");
+        }
+        <div class="row-fluid">
+            @if (colLayout != "single")
+            {
+                <div class="@thirdcolClass" id="left-col">
+                    <!-- Container for left-col in a three column layout. Hidden for small and phone screens
+                    so do not include content that you wish to show on those sizes -->
+                    @if (IsSectionDefined("thirdcol"))
+                    {
+                        <div class="side-box-left">
+                            @RenderSection("thirdcol", required: false)
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="hidden" id="left-col">
+                    @if (IsSectionDefined("thirdcol"))
+                    {
+                        RenderSection("thirdcol", false).WriteTo(TextWriter.Null);
+                    }
+                </div>
+
+            }
+            <div class="@contentClass" id="main-content">
+                @if (OfflineHelper.OfflineData != null)
+                {
+                    int min = (OfflineHelper.OfflineData.TimeWhenSiteWillGoOfflineUtc - DateTime.UtcNow).Minutes;
+                    @(min > 0 ? Html.Raw("<div class='alert alert-danger'>Forum will shutdown in " + min + " minutes</div>") : Html.Raw("<div class='alert alert-warning'>Forum is currently shutdown</div>"))
+                }
+
+                @{
+                    if (ClassicConfig.GetIntValue("intTopBanner") == 1)
+                    {
+                        if (IsSectionDefined("topBanner"))
+                        {
+                            @RenderSection("topBanner", required: false)
+                        }
+                    }
+                    else
+                    {
+                        if (IsSectionDefined("topBanner"))
+                        {
+                            RenderSection("topBanner", false).WriteTo(TextWriter.Null);
+                        }
+                    }
+                }
+
+                @if (IsSectionDefined("featured"))
+                {
+                    @RenderSection("featured", required: false)
+                }
+                @if (IsSectionDefined("topicsearchbox"))
+                {
+                    <div class="side-box hidden-md hidden-lg">
+                        @RenderSection("topicsearchbox", required: false)
+                    </div>
+                }
+                @RenderBody()
+            </div>
+            @if (colLayout != "single")
+            {
+                <div class="@colClass" id="right-col">
+                    @{
+                        if (IsSectionDefined("sideBanner"))
+                        {
+                            if (ClassicConfig.GetIntValue("intSideBanner") == 1)
+                            {
+
+                                @RenderSection("sideBanner", required: false)
+                            }
+                            else
+                            {
+                                RenderSection("sideBanner", false).WriteTo(TextWriter.Null);
+                            }
+
+                        }
+                    }
+                    @if (IsSectionDefined("sidebox"))
+                    {
+                        <div class="side-box-right">
+
+                            @RenderSection("sidebox", required: false)
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="hidden" id="right-col">
+                    @if (IsSectionDefined("sideBanner"))
+                    {
+                        RenderSection("sideBanner", false).WriteTo(TextWriter.Null);
+                    }
+                    @if (IsSectionDefined("sidebox"))
+                    {
+                        RenderSection("sidebox", false).WriteTo(TextWriter.Null);
+                    }
+                </div>
+
+            }
+        </div>
+    </main>
+    <div id="loading" style="display:none;" class="modal-backdrop fade in">
+        <div class="container text-center" style="height:100%;">
+            <i class="fa fa-spinner fa-4x fa-pulse fa-fw" id="spinWait" style="top: 50%; position: relative;"></i>
+        </div>
+    </div>
+    <!-- Begin page Footer -->
+    @{ Html.RenderPartial("_Footer"); }
+    @{
+        if (ClassicConfig.ShowDebug)
+        {
+            Html.RenderPartial("_MyCookies");
+        }
+    }
+
+    <!-- Begin modal-containers -->
+    <div id="application-error-div" class="modal fade" role="dialog" tabindex="-1">
+        <div id="" class="modal-dialog" style="width:75%">
+            <div class="modal-content">
+                @if (TempData["errorpopup"] != null)
+                {
+                    @Html.Raw(TempData["errorpopup"].ToString());
+                }
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-container" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="" class="modal-dialog">
+            <div class="modal-content" id="mdlContent">
+                <div class="container text-center">
+                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id='aboutModal' class='modal fade' data-url='@Url.Action("About")' dir="ltr">
+        <div id='aboutContainer' class="modal-dialog">
+        </div>
+    </div>
+    <div id='licenseModal' class='modal fade' data-url='@Url.Action("License")' dir="ltr">
+        <div id='licenseContainer' class="modal-dialog">
+        </div>
+    </div>
+    <!-- Begin common scripts -->
+    <script src="~/JavaScriptSettings/Resources"></script>
+    @Scripts.Render("~/bundles/corejs")
+    @Scripts.Render("~/bundles/Persian")
+
+    @if (clang == "nb" || clang == "nn" || clang == "no")
+    {
+        @Scripts.Render("~/Scripts/timeago/timeago.no.js")
+    }
+    else if (clang != "en")
+    {
+        @Scripts.Render("~/Scripts/timeago/timeago." + clang + ".js")
+    }
+
+    @Scripts.Render("~/bundles/Snitzscripts")
+    @Scripts.Render("~/scripts/pwstrength.min.js")
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var erpop = '@(TempData["errorpopup"] != null)';
+            if (erpop==='True') {
+                $('#application-error-div').modal('show');
+            }
+
+            /*show pending members*/
+            var pending = "@ViewBag.PendingMembers";
+            if (pending.length > 1 && pending === 'True') {
+                pendingMemberShow('@ResourceManager.GetLocalisedString("mnuAdminPending", "labels")');
+            }
+            /*show popup error message*/
+            var errMsg = '@ViewBag.Error';
+            var successMsg = "@ViewBag.Success";
+
+            if (errMsg.length > 1) {
+                errorDlg('@ViewBag.ErrTitle', errMsg);
+            }
+            if (successMsg.length > 1) {
+                successDlg(successMsg);
+            }
+            if ('@ViewBag.Prompt'.length > 1) {
+                BootstrapDialog.prompt({
+                    type: BootstrapDialog.TYPE_WARNING,
+                    title: "@ViewBag.PromptTitle",
+                    message: $('<span>No Job server found.<br/>Reset the AppPool?</span>'),
+                    callback: function (result) {
+                        // result will be true if button was click, while it will be false if users close the dialog directly.
+                        if (result) {
+                            $.ajax({
+                                async: true,
+                                type: "POST",
+                                url: window.SnitzVars.baseUrl + "Admin/ResetApplication",
+                                data: { userName: window.SnitzVars.userName },
+                                cache: false,
+                                success: function () { return false; }
+
+                            });
+                        }
+                    }
+
+                });
+            }
+            function OnSuccess(response) {
+                $("time.timeago").timeago();
+            }
+
+            function OnFailure(ajaxContext) {
+                var response = ajaxContext.get_response();
+                var statusCode = response.get_statusCode();
+                errorDlg('Error: ' + statusCode, response);
+            }
+            $('#show-about').click(function () {
+                var url = $('#aboutModal').data('url');
+
+                $.get(url, function (data) {
+                    $('#aboutContainer').html(data);
+
+                    $('#aboutModal').modal('show');
+                });
+            });
+            $('#show-license').click(function () {
+                var url = $('#licenseModal').data('url');
+
+                $.get(url, function (data) {
+                    $('#licenseContainer').html(data);
+
+                    $('#licenseModal').modal('show');
+                });
+            });
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+    @Html.PageScripts()
+    <script>
+
+        ready_or_not();
+
+    </script>
+</body>
+</html>

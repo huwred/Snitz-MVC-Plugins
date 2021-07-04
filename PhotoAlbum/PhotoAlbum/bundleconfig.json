@@ -1,0 +1,68 @@
+[
+  {
+    "outputFileName": "Content/photoalbum.min.css",
+    "inputFiles": [
+      "Content/photoalbum.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/snitz.photoalbum.min.js",
+    "inputFiles": [
+      "Scripts/snitz.photoalbum.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/gallery.upload.min.js",
+    "inputFiles": [
+      "Scripts/gallery.upload.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/snitz.gallery.upload.min.js",
+    "inputFiles": [
+      "Scripts/snitz.gallery.upload.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/dropzone.min.css",
+    "inputFiles": [
+      "Content/dropzone.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/plugincss/bjqs.min.css",
+    "inputFiles": [
+      "Content/plugincss/bjqs.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/plugincss/jquery.bsPhotoGallery.min.css",
+    "inputFiles": [
+      "Content/plugincss/jquery.bsPhotoGallery.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/plugincss/jquery.contextMenu.min.css",
+    "inputFiles": [
+      "Content/plugincss/jquery.contextMenu.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/pluginjs/jquery.bsPhotoGallery.min.js",
+    "inputFiles": [
+      "Scripts/pluginjs/jquery.bsPhotoGallery.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/pluginjs/jquery.contextMenu.min.js",
+    "inputFiles": [
+      "Scripts/pluginjs/jquery.contextMenu.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/pluginjs/jquery.ui.position.min.js",
+    "inputFiles": [
+      "Scripts/pluginjs/jquery.ui.position.js"
+    ]
+  }
+]
