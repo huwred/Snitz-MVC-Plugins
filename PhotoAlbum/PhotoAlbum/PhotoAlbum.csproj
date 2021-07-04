@@ -436,15 +436,6 @@
     <Content Include="Scripts\pluginjs\snitz.photoalbum.min.js">
       <DependentUpon>snitz.photoalbum.js</DependentUpon>
     </Content>
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <None Include="Views\PhotoAlbum\AlbumNew.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>AlbumNew.generated.cs</LastGenOutput>

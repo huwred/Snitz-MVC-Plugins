@@ -205,7 +205,6 @@
       <DependentUpon>snitz.extendedprofile.js</DependentUpon>
     </Content>
     <None Include="bundleconfig.json" />
-    <None Include="connectionstrings.config" />
     <None Include="Properties\PublishProfiles\Snitz.pubxml" />
     <None Include="Scripts\pluginjs\snitz.extendedprofile.js" />
     <None Include="Views\MemberFields\_Enable.cshtml">
@@ -216,7 +215,6 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>_ExProfileEdit.generated.cs</LastGenOutput>
     </None>
-    <None Include="snitz.config" />
     <None Include="Views\MemberFields\Admin.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Admin.generated.cs</LastGenOutput>
@@ -246,18 +244,11 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>FieldType.generated.cs</LastGenOutput>
     </None>
-    <None Include="Web.config" />
     <None Include="Views\_ViewStart.cshtml" />
     <None Include="Views\Web.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="Views\Shared\_Layout.cshtml" />
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

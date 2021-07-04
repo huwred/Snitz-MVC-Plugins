@@ -155,15 +155,6 @@
   <ItemGroup>
     <Content Include="App_Data\dbsWidgets.xml" />
     <None Include="Properties\PublishProfiles\Snitz.pubxml" />
-    <None Include="Web.config">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <None Include="Views\_ViewStart.cshtml" />
     <None Include="Views\Web.config" />
     <None Include="Views\Shared\_Layout.cshtml" />
