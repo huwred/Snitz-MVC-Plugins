@@ -14,4 +14,4 @@ It supports the following Field types
 * H = Horizontal Radio Buttons
 * V = Vertical Radio Buttons
 
-![Member Fields](https://www.reddick.co.uk/mvc/ProtectedContent/Members/2/extendedAdmin.PNG "Member Fields")
+
