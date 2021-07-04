@@ -1,0 +1,58 @@
+﻿@using SnitzDataModel.Extensions
+@using LangResources.Utility
+@using SnitzEvents.Helpers
+
+
+@model SnitzEvents.Models.CalendarEventItem
+
+            @Html.HiddenFor(m=>m.TopicId,new{id="cal-topicid"})
+            <div class="form-group">
+                <label for="StartDate" class="control-label">@ResourceManager.GetLocalisedString("lblStartDate", "Events")</label>
+                @if (Model.TopicId > 0 && Model.StartDate.HasValue)
+                {
+                    <input type="text" class="form-control cal-dates" id="calendar-start-date" name="StartDate" value="@Model.StartDate.Value.ToString("dd MMM yyyy HH:mm")"/>
+                }
+                else
+                {
+                    <input type="text" class="form-control cal-dates" id="calendar-start-date" name="StartDate" value="" />
+
+                }
+
+
+            </div>
+            <div class="form-group">
+                <label for="EndDate" class="control-label">@ResourceManager.GetLocalisedString("lblEndDate", "Events")</label>
+                @if (Model.EndDate.HasValue)
+                {
+                    <input type="text" class="form-control cal-dates" id="calendar-end-date" name="EndDate" value="@Model.EndDate.Value.ToString("dd MMM yyyy HH:mm")"/>
+                }
+                else
+                {
+                    <input type="text" class="form-control cal-dates" id="calendar-end-date" name="EndDate" value=""/>
+                }
+
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>@Html.CheckBoxFor(m => m.IsAllDayEvent, new { id = "event-allday" }) @ResourceManager.GetLocalisedString("lblAllDay", "Events")</label>
+                </div>
+            </div>
+<div class="form-group">
+    <label for="cal-recur" class="control-label">@ResourceManager.GetLocalisedString("lblRecurs", "Events")</label>
+    @Html.EnumDropDownListFor(m=>m.Recurs,new{@class="form-control",id="cal-recur"},"")
+</div>
+<div class="form-group" id="cal-dow" style="display:none;">
+    @{
+        var daySources = new SelectList(Enum.GetValues(typeof(CalEnums.CalDays)).Cast<CalEnums.CalDays>().Select(v => new SelectListItem
+        {
+            Text = v.ToString(),
+            Value = ((int)v).ToString()
+        }).ToList(), "Value", "Text");
+
+        
+    }
+
+        @Html.CheckBoxListFor(model => model.SelectedDays, daySources)
+        
+</div>
+

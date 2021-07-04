@@ -1,0 +1,84 @@
+﻿@using System.Web.UI.WebControls
+@using System.Web.Optimization
+@using SnitzCore.Extensions;
+@using SnitzDataModel.Extensions;
+@using LangResources.Utility
+@using SnitzMembership;
+@using SnitzConfig
+
+@model SnitzEvents.ViewModels.ClubEventViewModel
+
+@{
+    ViewBag.Title = "Event";
+}
+
+<div class="container-fluid">
+    <h5 class="title">@Html.DisplayFor(model => model.Title)</h5>
+    <hr class="title" />
+    <dl class="dl-horizontal">
+        <dt>
+            @ResourceManager.GetLocalisedString("lblStartDate", "Events")
+        </dt>
+
+        <dd class="col-xs-2">
+            @Model.StartDate.ToClientTime().ToFormattedString()
+        </dd>
+
+        <dt>
+            @ResourceManager.GetLocalisedString("lblEndDate", "Events")
+        </dt>
+
+        <dd class="col-xs-2">
+            @Model.EndDate.ToClientTime().ToFormattedString()
+        </dd>
+        <dt>
+            @ResourceManager.GetLocalisedString("lblEventClub", "Events")
+        </dt>
+
+        <dd class="col-xs-2">
+            @Html.DropDownListFor(model => model.ClubId, new SelectList(Model.Clubs, "Key", "Value"), new { @class = "form-control", @tabindex = 1, disabled = "disabled" })
+        </dd>
+
+        <dt>
+            @ResourceManager.GetLocalisedString("lblEventCategory", "Events")
+        </dt>
+
+        <dd class="col-xs-2">
+            @Html.DropDownListFor(model => model.CatId, new SelectList(Model.Categories, "Key", "Value"), new { @class = "form-control", @tabindex = 1, disabled = "disabled" })
+        </dd>
+
+        <dt>
+            @ResourceManager.GetLocalisedString("lblEventLocation", "Events")
+        </dt>
+
+        <dd class="col-xs-2">
+            @Html.DropDownListFor(model => model.LocId, new SelectList(Model.Locations, "Key", "Value"), new { @class = "form-control", @tabindex = 1, disabled = "disabled" })
+        </dd>
+
+
+        <dt>
+            @ResourceManager.GetLocalisedString("lblEventDetails", "Events")
+        </dt>
+
+        <dd class="col-xs-4">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>&nbsp;</dt>
+        <dd class="col-xs-2"><br />@Html.ActionLink("Back to previous page", null, null, null, new { href = Request.UrlReferrer })</dd>
+    </dl>
+    <p>
+        @if (WebSecurity.IsAuthenticated)
+        {
+            if (String.IsNullOrWhiteSpace(ClassicConfig.GetValue("STRRESTRICTROLES")))
+            {
+                @Html.ActionLink(" ", "AddEditEvent", new { id = Model.Id }, new { @class = "fa fa-edit fa-1_5x", title = ResourceManager.GetLocalisedString("lblEditEvent", "Events") })
+            }
+            else if (SnitzMembership.WebSecurity.IsUserInRole(WebSecurity.CurrentUserName, Model.AllowedRoles))
+            {
+                @Html.ActionLink(" ", "AddEditEvent", new { id = Model.Id }, new { @class = "fa fa-edit fa-1_5x", title = ResourceManager.GetLocalisedString("lblEditEvent", "Events") })
+            }
+        }
+
+    </p>
+</div>
+

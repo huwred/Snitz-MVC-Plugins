@@ -1,0 +1,176 @@
+﻿
+@using System.Globalization
+@using LangResources.Utility
+@using SnitzConfig
+@using SnitzCore.Filter
+
+<!DOCTYPE html>
+@{
+    PageData["globalVar"] = true;
+}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @RenderSection("pageMeta", required: false)
+    <title>@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link rel="alternate" type="application/rss+xml" 
+  title="RSS Feed for @(ClassicConfig.ForumTitle)" href="~/RssFeed/Active" />
+
+    @Styles.Render("~/Content/css")
+
+    @Styles.Render("~/Content/photoalbum.css")
+    
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    @Scripts.Render("~/bundles/oldIEBrowsersSupport")
+    <![endif]-->
+    @RenderSection("styles", required: false)
+
+</head>
+    <body id="page-top">
+        <!-- class sizeing for content cols -->
+        @{
+            var colLayout = ClassicConfig.GetValue("STRLAYOUT");
+            var contentClass = "col-xs-12 col-sm-8 col-lg-9 padding-xs";
+            var colClass = "col-xs-12 col-sm-4 col-lg-3";
+            var thirdcolClass = "hidden";
+            if (colLayout == "left")
+            {
+                contentClass += " col-sm-push-4 col-lg-push-3";
+                colClass += " col-sm-pull-8 col-lg-pull-9";
+            }
+            if (colLayout == "threecol")
+            {
+                contentClass = "col-xs-12 col-sm-8 col-md-6 padding-xs";
+                colClass = "col-xs-12 col-sm-4 col-md-3";
+                thirdcolClass = "col-md-3 hidden-xs hidden-sm";
+            }
+            CultureInfo ci = (CultureInfo)Session["Culture"];
+            string clang = ci.TwoLetterISOLanguageName;
+        }        
+        <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" >
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand form-inline"><a href="@Config.ForumUrl" data-toggle="tooltip" data-placement="bottom" title="@Html.Raw(Config.ForumTitle??ClassicConfig.ForumTitle)">@if(!String.IsNullOrEmpty(Config.TitleImage)) {@Html.ForumLogo()}</a></span>
+                
+                </div>
+                <div class="collapse navbar-collapse">
+                    @if (Session["SnitzMenu"] == null)
+                    {
+                        Session["SnitzMenu"] = Html.Partial("~/Views/Shared/_Menu.cshtml");
+                    }
+                    @Session["SnitzMenu"]
+                
+                    @Html.Partial("_LoginPartial")
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+        <!-- Begin page content -->
+        <div class="container-fluid">
+            <noscript>
+                <div class="alert">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Warning!</strong> Please enable JavaScript in your browser!
+                </div>
+            </noscript>
+
+            @if (IsSectionDefined("breadcrumb"))
+            {
+                <div class="breadcrumb">
+                    @RenderSection("breadcrumb", required: false)
+                </div>
+            }
+        
+            <div class="row-fluid">
+
+                <div class="@thirdcolClass" id="left-col">
+                    <!-- Container for left-col in a three column layout. Hidden for small and phone screens
+                        so do not include content that you wish to show on those sizes -->
+                    @if (IsSectionDefined("thirdcol"))
+                    {
+                        <div class="side-box-left">                         
+                            @RenderSection("thirdcol", required: false)
+                        </div>
+                    }
+                </div>
+
+                <div class="@contentClass" id="main-content">
+                    @{
+                        if(ClassicConfig.GetIntValue("intTopBanner")==1) {
+                            if (IsSectionDefined("topBanner"))
+                            {
+                                @RenderSection("topBanner", required: false)
+                            }
+                        }
+                        else
+                        {
+                            if (IsSectionDefined("topBanner"))
+                            {
+                                RenderSection("topBanner", false).WriteTo(TextWriter.Null);
+                            }        
+                
+                        }
+                    }                
+
+                    @if (IsSectionDefined("featured"))
+                    {
+                        @RenderSection("featured", required: false)
+                    }
+                    @if (IsSectionDefined("topicsearchbox"))
+                    {
+                        <div class="side-box hidden-sm hidden-md hidden-lg">
+                            @RenderSection("topicsearchbox", required: false)
+                        </div>
+                    }                
+                    @RenderBody()
+                </div>
+
+                <div class="@colClass" id="right-col">
+                    @{
+                        if (IsSectionDefined("sideBanner"))
+                        {
+                            if (ClassicConfig.GetIntValue("intSideBanner") == 1)
+                            {
+
+                                @RenderSection("sideBanner", required: false)
+                            }
+                            else
+                            {
+                                RenderSection("sideBanner", false).WriteTo(TextWriter.Null);
+                            }
+
+                        }
+                    }                
+                    @if (IsSectionDefined("sidebox"))
+                    {
+                        <div class="side-box-right">
+                         
+                            @RenderSection("sidebox", required: false)
+                        </div>
+                    }
+                </div>
+
+            </div>
+       
+        </div>
+    
+  
+        <!-- Begin common scripts -->
+
+
+
+
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

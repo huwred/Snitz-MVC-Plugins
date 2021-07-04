@@ -1,0 +1,16 @@
+﻿@using LangResources.Utility
+@using SnitzEvents.Helpers
+
+@model SnitzEvents.Models.CalForumAuth
+
+@using (Html.BeginForm("SaveForum", "Calendar",FormMethod.Post, new { @class = "form", id = "cal-forumAuth" }))
+{
+    <div class="panel panel-default">
+    <div class="form-group panel-body">
+        <label>@ResourceManager.GetLocalisedString("EventSettingTitle", "Events")</label>
+            @Html.EnumDropDownListFor(m=>m.Allowed,"Select Auth type","0",new{@class="form-control"})
+    </div>
+    @Html.HiddenFor(m=>m.ForumId,new{id="cal-forumid"})
+
+    </div>
+}

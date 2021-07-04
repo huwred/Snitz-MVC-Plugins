@@ -1,0 +1,152 @@
+﻿@using System.Web.Optimization
+@using System.Web.Mvc.Html
+@using SnitzEvents.Views.Helpers;
+@using SnitzConfig;
+@using Snitz.Base
+@using LangResources.Utility;
+@using SnitzDataModel.Models
+
+@model SnitzEvents.ViewModels.ClubEventViewModel
+@section styles{
+    @Styles.Render("~/Content/jquery-ui.css")
+    @Styles.Render("~/Content/jquery-ui-timepicker-addon.min.css")
+    @Html.Raw(Config.ThemeCss("fullcalendar.min.css"))
+}
+<div class="container-fluid">
+
+    @using (Html.BeginForm("AddEditEvent", "Events", FormMethod.Post, new { @class = "form form-horizontal" }))
+    {
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblEventTitle", "Events")</label>
+            <div class="col-xs-5">
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblStartDate", "Events")</label>
+            <div class="col-xs-2">
+                @if (Model.StartDate.HasValue)
+                {
+                    <input type="text" class="form-control club-dates" id="calendar-start-date" name="StartDate" value="@Model.StartDate.Value.ToString("dd MMM yyyy")" />
+                }
+                else
+                {
+                    <input type="text" class="form-control club-dates" id="calendar-start-date" name="StartDate" value="" />
+                }
+
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblEndDate", "Events")</label>
+            <div class="col-xs-2">
+                @if (Model.EndDate.HasValue)
+                {
+                    <input type="text" class="form-control club-dates" id="calendar-end-date" name="EndDate" value="@Model.EndDate.Value.ToString("dd MMM yyyy")" />
+                }
+                else
+                {
+                    <input type="text" class="form-control club-dates" id="calendar-end-date" name="EndDate" value="" />
+                }
+
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblEventCategory", "Events")</label>
+            <div class="col-xs-6">
+                @Html.RadioButtonForSelectList(model => model.CatId, new SelectList(Model.Categories, "Key", "Value"), Enumerators.Position.Horizontal)
+                @*@Html.DropDownListFor(model => model.Event.CatId, new SelectList(Model.Categories, "Key", "Value"), new {@class = "form-control", @tabindex = 1})*@
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblEventClub", "Events")</label>
+            <div class="col-xs-2">
+                @Html.DropDownListFor(model => model.ClubId, new SelectList(Model.Clubs, "Key", "Value"), new { @class = "form-control", @tabindex = 1 })
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblEventLocation", "Events")</label>
+            <div class="col-xs-2">
+                @Html.DropDownListFor(model => model.LocId, new SelectList(Model.Locations, "Key", "Value"), new { @class = "form-control", @tabindex = 1 })
+            </div>
+        </div>
+        <div class="form-group clearfix">
+            <label class="control-label col-xs-2">@ResourceManager.GetLocalisedString("lblEventDetails", "Events")</label>
+            <div class="col-xs-7">
+                <div class="form-group" id="editorDiv">
+                    @if (ViewData["noToolbar"] == null)
+                    {
+                        <div class="col-xs-12">@Html.Partial("_EditorBar", Model, new ViewDataDictionary(this.ViewData) { { "buttons", new List<string>() } })</div>
+                    }
+
+                    <div class="qr-editor-field col-xs-12">
+                        <textarea name="Description" oninput="isTyping()" class="bbc-code-editor multi-line form-control" id="Message" data-val-required="Message is Required" data-val="true">@Model.Description</textarea>
+                        <div id="popup-btns" class="btn-toolbar editor-buttons" role="toolbar" style="position: absolute;top:0;right:0;margin-right:15px;">
+                            <div class="btn-group btn-group-sm">
+                                @if (ClassicConfig.GetValue("STRALLOWUPLOADS") == "1")
+                                {
+                                    <a href="@Url.Action("FileUpload", "Home")" class="btn btn-default modal-link" title="@ResourceManager.GetLocalisedString("tipAttach", "Tooltip")"><span class="fa fa-paperclip"></span></a>
+
+                                    if (ClassicConfig.GetValue("STRPHOTOALBUM") == "1" || ClassicConfig.GetValue("INTCOMMONALBUM") == "1")
+                                    {
+                                        <a href="@Url.Action("UploadFile", "PhotoAlbum",new{fields=false})" class="btn btn-default gallery-link" data-toggle="tooltip" title="@ResourceManager.GetLocalisedString("tipUpload", "PhotoAlbum")"><span class="fa fa-file-image-o"></span></a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden-xs col-sm-12">
+                        @if (ClassicConfig.EmoticonTable)
+                        {
+                            @Html.Partial("_emoticons", Emoticon.Emoticons())
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+
+        <div class="form-group">
+            @Html.HiddenFor(model => model.Id)
+            <div class="col-xs-2"></div>
+            <div class="col-xs-7">@Html.ValidationSummary(false, "", new { @class = "list-group-item-info" })</div>
+
+        </div>
+        <div class="form-group col-xs-9 padding-md pull-right">
+            <input type="button" value="@ResourceManager.GetLocalisedString("btnCancel", "labels")" class="btn btn-sm btn-warning cancel" />
+            <input type="reset" value="@ResourceManager.GetLocalisedString("btnReset", "labels")" class="btn btn-sm btn-primary" />
+            <input type="submit" value="@ResourceManager.GetLocalisedString("btnSave", "labels")" class="btn btn-sm btn-success" />
+        </div>
+    }
+
+</div>
+
+
+@section scripts{
+    @Scripts.Render("~/Scripts/jquery-ui-timepicker-addon.min.js")
+    @Scripts.Render("~/Scripts/snitz.cal.min.js")
+    @if (Session["Culture"] != null && Session["Culture"].ToString() != "en")
+    {
+        @Scripts.Render("~/Scripts/lang/" + Session["Culture"] + ".js")
+    }
+    <script type="text/javascript">
+        var timer = null;
+        function isTyping() {
+            clearTimeout(timer);
+            var value = $('#Message').val();
+            if (value) {
+                $("#popup-btns").hide();
+                timer = setTimeout(notTyping, 2000);// that's 2 seconds of not typing
+            }
+            else {
+                notTyping();
+            }
+        }
+
+        function notTyping() {
+            $("#popup-btns").show();
+        }        
+    </script>
+}

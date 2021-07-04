@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Events MOD" applied="false">
+  <Alter>
+    <Table name="CAL_EVENTS" >
+      <Column action="ADD" name="EVENT_ENDDATE" type="varchar" size="50" allownulls="true" />
+      <Column action="ADD" name="EVENT_ALLDAY" type="bit" default="0" allownulls="false" />
+      <Column action="ADD" name="EVENT_RECURS" type="int" default="0" allownulls="false" />
+      <Column action="ADD" name="EVENT_DAYS" type="varchar" size="20" allownulls="true" />
+    </Table>
+  </Alter>
+</Tables>

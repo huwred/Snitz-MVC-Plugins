@@ -1,0 +1,116 @@
+﻿@using System.Globalization
+@using System.Web.Optimization
+@using LangResources.Utility
+@using SnitzConfig
+@using SnitzCore.Utility;
+@using SnitzEvents.Models
+@model dynamic
+
+@{
+    ViewBag.Title = Config.ForumTitle + " | " + ResourceManager.GetLocalisedString("calTitle", "Events");
+    CultureInfo ci = SessionData.Get<CultureInfo>("Culture");
+    string clang = ci.TwoLetterISOLanguageName;
+    string[] rtlLangs = new string[] { "ar", "arc", "dv", "fa", "ha", "khw", "ks", "ku", "ps", "ur", "yi", "he" };
+    string[] arabic = new string[] { "ar", "arc", "dv", "fa", "ha", "khw", "ks", "ku", "ps", "ur" }; //Cairo
+    string[] aramaic = new string[] { "yi", "he" }; //Tinos
+
+    bool isRighToLeft = (rtlLangs.Contains(clang));
+
+    if (!SessionData.Contains("isRighToLeft") || isRighToLeft != SessionData.Get<bool>("isRighToLeft"))
+    {
+        SessionData.Set("isRighToLeft", isRighToLeft);
+    }
+}
+@section styles{
+    @Styles.Render("~/Content/plugincss/fullcalendar.min.css")
+    @Styles.Render("~/Content/jquery-ui-timepicker-addon.min.css")
+    @Html.Raw(Config.ThemeCss("plugincss/fullcalendar.min.css"))
+    @if (isRighToLeft)
+    {
+        @Styles.Render("~/Content/plugincss/fullcalendar-rtl.css")
+    }
+}
+@section sidebox{
+
+
+    @if (ClassicConfig.GetIntValue("INTCALPUBLICHOLIDAYS") == 1)
+    {
+        <div class="side-box">
+            @ResourceManager.GetLocalisedString("calHolidaysFor", "Events")
+            @Html.DropDownList("calCountry", new SelectList(ViewData["Countries"] as List<EnricoCountry>, "CountryCode", "Name", ClassicConfig.GetValue("STRCALCOUNTRY")), new { @class = "form-control", id = "change-holidays" })
+            <select class="form-control" name="Region" id="countryRegion" style="display:none;"><option value=''>No Regions</option></select>
+            <span class="small">@ResourceManager.GetLocalisedString("calPublicData", "Events") <a href="http://kayaposoft.com/enrico/" title="Enrico Service is a free service written in PHP providing public holidays for several countries" data-toggle="tooltip">Enrico</a></span>
+        </div>
+    }
+    @Html.Partial("_RightColumn", new ViewDataDictionary(this.ViewData) { { "show", new List<string>() { "catlist", "photo", "poll" } } })
+
+}
+<div class="chunk-main">
+    <h5>@ResourceManager.GetLocalisedString("calTitle", "Events")</h5>
+    <hr class="title" />
+    <div class="row-fluid">
+        <div id="calendar"></div>
+    </div>
+    <div class="row-fluid"></div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var upComingEventsTitle = '[@ResourceManager.GetLocalisedString("upComingEventTitle", "Events")]';
+        var pastEventsTitle = '[@ResourceManager.GetLocalisedString("upPastEventsTitle", "Events")]';
+
+    </script>
+    @Scripts.Render("~/Scripts/moment.min.js")
+    @if (clang == "fa")
+    {
+        @Scripts.Render("~/Scripts/moment-jalaali.min.js")
+    }
+    @*@Scripts.Render("~/Scripts/jquery-ui-timepicker-addon.js")*@
+    @Scripts.Render("~/Scripts/pluginjs/fullcalendar-year.min.js")
+    @Scripts.Render("~/Scripts/lang/" + clang + ".js")
+    @Scripts.Render("~/Scripts/pluginjs/snitz.cal.min.js")
+
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+
+                $('#countryRegion').change(function () {
+                    var val = $('#change-holidays').val() + '|' + $(this).val();
+                    FullCalendar("@Url.Action("GetCalendarEvents")", 'calendar','@ClassicConfig.GetValue("INTFIRSTDAYOFWEEK")','?country=' + val);
+                });
+
+                $('#change-holidays')
+                    .change(function() {
+                        var val = $(this).val();
+                        populateRegions(val);
+                        FullCalendar("@Url.Action("GetCalendarEvents")", 'calendar','@ClassicConfig.GetValue("INTFIRSTDAYOFWEEK")','?country=' + val);
+
+                    });
+
+                FullCalendar("@Url.Action("GetCalendarEvents")", 'calendar','@ClassicConfig.GetValue("INTFIRSTDAYOFWEEK")','');
+                populateRegions($('#change-holidays').val());
+            });
+        function populateRegions(country) {
+                        var subItems="";
+                        $.getJSON("@Url.Action("GetRegions","Calendar")", { id: country }, function (data) {
+
+                            $.each(data, function (index, item) {
+                                if (item === '@ClassicConfig.GetValue("STRCALREGION")') {
+                                    subItems += "<option value='" + item + "' selected>" + item + "</option>";
+                                } else {
+                                    subItems += "<option value='" + item + "'>" + item + "</option>";
+                                }
+                            });
+                            if (subItems.length > 1) {
+                                subItems = "<option value=''>Select Region</option>" + subItems;
+                                $("#countryRegion").html(subItems);
+                                $("#countryRegion").show();
+                            } else {
+                                subItems = "<option value='' selected>No Regions</option>";
+                                $("#countryRegion").html(subItems);
+                                $("#countryRegion").hide();
+                            }
+
+                        });
+        }
+    </script>
+}

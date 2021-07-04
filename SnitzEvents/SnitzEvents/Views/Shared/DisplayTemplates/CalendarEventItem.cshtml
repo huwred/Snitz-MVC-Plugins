@@ -1,0 +1,32 @@
+﻿@using SnitzCore.Extensions;
+@using LangResources.Utility
+@using SnitzEvents.Helpers
+@model  SnitzEvents.Models.CalendarEventItem
+
+@Html.LabelFor(m => m.TopicId)
+<div class="form-group">
+    <label for="Start" class="control-label">@ResourceManager.GetLocalisedString("lblStartDate", "Events")</label>
+    @Html.LabelFor(m => m.StartDate)
+</div>
+<div class="form-group">
+    <label for="End" class="control-label">@ResourceManager.GetLocalisedString("lblEndDate", "Events")</label>
+    @Html.LabelFor(m => m.EndDate)
+</div>
+<div class="form-group">
+    <div class="checkbox">
+        <label>@Html.LabelFor(m => m.IsAllDayEvent) @ResourceManager.GetLocalisedString("lblAllDay", "Events")</label>
+    </div>
+</div>
+<div class="form-group">
+    <label for="Recurs" class="control-label">@ResourceManager.GetLocalisedString("lblRecurs", "Events")</label>
+    @Html.LabelFor(m => m.Recurs) @Html.LabelFor(m => m.Days)
+</div>
+<div class="form-group" id="cal-dow" style="display:none;">
+    @{var numList = Enum.GetValues(typeof(CalEnums.CalDays));}
+    @foreach (object radiotext in numList)
+    {
+        <label class="small radio-inline"><input type="radio" name="Days" value="@((int)radiotext)"> @radiotext.ToString()</label>
+
+    }
+</div>
+

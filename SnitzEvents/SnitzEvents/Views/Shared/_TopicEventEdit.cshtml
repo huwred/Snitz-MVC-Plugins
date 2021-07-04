@@ -1,0 +1,101 @@
+﻿
+@using LangResources.Utility
+@using SnitzEvents.Helpers
+@using SnitzDataModel.Extensions
+
+@model SnitzEvents.Models.CalendarEventItem
+@{
+    int curPage = ViewBag.Page;
+    int pagecount = ViewBag.Pages;
+    string title = ResourceManager.GetLocalisedString("TopicEventTitle", "Events");
+    if (pagecount > 1)
+    {
+        title = ResourceManager.GetLocalisedString("RecurringEvent", "Events");
+    }
+}
+@using (Html.BeginForm("EditEvent", "Calendar", FormMethod.Post, new { @class = "form", id = "cal-editTopicEvent" }))
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading text-center">
+            @title
+        @if (pagecount > 1 && curPage > 1)
+        {
+            <span class="pull-left text-white"><a href="#" id="cal-prevevent"><i class="fa fa-chevron-left"></i></a></span>
+        }
+
+        @if (pagecount > 1 && curPage < pagecount)
+        {
+            <span class="pull-right text-white"><a href="#" id="cal-nextevent"><i class="fa fa-chevron-right"></i></a></span>
+        }
+    </div>
+    <div class="panel-body">
+        @Html.HiddenFor(m => m.TopicId, new { id = "cal-topicid" })
+        <input type="hidden" value="@ViewBag.ForumId" id="cal-forumid" name="cal-forumid" />
+        <input type="hidden" value="@ViewBag.Page" id="cal-curpage" />
+        <input type="hidden" value="@Model.Id" id="Id" name="Id" />
+        @Html.HiddenFor(m => m.Title)
+        <div class="form-group">
+            <label for="StartDate" class="control-label">@ResourceManager.GetLocalisedString("lblStartDate", "Events")</label>
+            @if (Model.TopicId > 0 && Model.StartDate.HasValue)
+            {
+                <input type="text" class="form-control cal-dates" id="calendar-start-date" name="StartDate" value="@Model.StartDate.Value.ToString("dd MMM yyyy HH:mm")" />
+            }
+            else
+            {
+                <input type="text" class="form-control cal-dates" id="calendar-start-date" name="StartDate" value="" />
+
+            }
+
+
+        </div>
+        <div class="form-group">
+            <label for="EndDate" class="control-label">@ResourceManager.GetLocalisedString("lblEndDate", "Events")</label>
+            @if (Model.EndDate.HasValue)
+            {
+                <input type="text" class="form-control cal-dates" id="calendar-end-date" name="EndDate" value="@Model.EndDate.Value.ToString("dd MMM yyyy HH:mm")" />
+            }
+            else
+            {
+                <input type="text" class="form-control cal-dates" id="calendar-end-date" name="EndDate" value="" />
+            }
+
+        </div>
+        <div class="form-group">
+            <div class="checkbox">
+                <label>@Html.CheckBoxFor(m => m.IsAllDayEvent, new { id = "event-allday" }) @ResourceManager.GetLocalisedString("lblAllDay", "Events")</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Recurs" class="control-label">@ResourceManager.GetLocalisedString("lblRecurs", "Events")</label>
+            @Html.EnumDropDownListFor(m => m.Recurs, new { @class = "form-control", id = "cal-recur" }, "")
+        </div>
+        <div class="form-group" id="cal-dow" style="display:none;">
+            @{
+                var daySources =
+                    new SelectList(Enum.GetValues(typeof(CalEnums.CalDays)).Cast<CalEnums.CalDays>().Select(v => new SelectListItem
+                    {
+                        Text = v.ToString(),
+                        Value = ((int)v).ToString()
+                    }).ToList(), "Value", "Text");
+
+            }
+
+            @Html.CheckBoxListFor(model => model.SelectedDays, daySources)
+
+        </div>
+    </div>
+    <div class="panel-footer clearfix">
+        <div class="col-xs-9 padding-xs">
+            <div class="form-group">
+                <select name="EventDelete" id="EventDelete" class="form-control">
+                    <option value="0">Delete Options</option>
+                    <option value="1">@ResourceManager.GetLocalisedString("ThisDate", "Events")</option>
+                    <option value="2">@ResourceManager.GetLocalisedString("AllDates", "Events")</option>
+                    <option value="3">@ResourceManager.GetLocalisedString("FutureDates", "Events")</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3 padding-xs"><button type="button" class="btn btn-sm btn-success" id="cal-update">@ResourceManager.GetLocalisedString("btnSave", "labels")</button></div>
+    </div>
+</div>
+}

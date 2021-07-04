@@ -1,0 +1,10 @@
+﻿@using LangResources.Utility
+@using SnitzConfig
+<div class="form-group">
+    <label for="Enabled" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("calTitle", "Events")</label>
+    <div class="col-xs-4 col-sm-1">
+        <input class="yesno-checkbox" id="Enabled" type="checkbox" name="Enabled" data-size="mini" checked="@(ClassicConfig.GetIntValue("INTCALEVENTS",0) == 1)" value="true" />
+    </div>
+    <div class="col-xs-4">
+    </div>
+</div>

@@ -1,0 +1,62 @@
+[
+  {
+    "outputFileName": "Scripts/jquery-ui-timepicker-addon.min.js",
+    "inputFiles": [
+      "Scripts/jquery-ui-timepicker-addon.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/fullcalendar.min.js",
+    "inputFiles": [
+      "Scripts/fullcalendar.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/fullcalendar.min.css",
+    "inputFiles": [
+      "Content/fullcalendar.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/fullcalendar.print.min.css",
+    "inputFiles": [
+      "Content/fullcalendar.print.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/moment-with-locales.min.js",
+    "inputFiles": [
+      "Scripts/moment-with-locales.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/moment.min.js",
+    "inputFiles": [
+      "Scripts/moment.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/moment-jalaali.min.js",
+    "inputFiles": [
+      "Scripts/moment-jalaali.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/pluginjs/fullcalendar-year.min.js",
+    "inputFiles": [
+      "Scripts/pluginjs/fullcalendar-year.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/bootstrap.min.js",
+    "inputFiles": [
+      "Scripts/bootstrap.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/fullcalendar-rtl.min.css",
+    "inputFiles": [
+      "Content/fullcalendar-rtl.css"
+    ]
+  }
+]

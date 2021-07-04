@@ -1,0 +1,140 @@
+﻿@using System.Net.Configuration
+
+@using SnitzDataModel.Extensions
+@using LangResources.Utility
+@using SnitzConfig
+@using SnitzEvents.Views.Helpers
+
+@model SnitzEvents.ViewModels.CalAdminViewModel
+
+@using (Html.BeginForm("SaveSettings", "Calendar", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @*<div class="form-group">
+        <label for="Enabled" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("calTitle", "Events")</label>
+        <div class="col-xs-4">
+            <input class="yesno-checkbox" id="Enabled" type="checkbox" name="Enabled" data-size="mini" checked="@Model.Enabled" value="true" />
+        </div>
+        <div class="col-xs-4">
+        </div>
+    </div>*@
+    <div class="form-group">
+        <label for="IsPublic" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("calIsPublic", "Events")</label>
+        <div class="col-xs-4">
+            <input class="yesno-checkbox" id="IsPublic" type="checkbox" name="IsPublic" data-size="mini" checked="@Model.IsPublic" value="true" />
+        </div>
+        <div class="col-xs-4">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="UpcomingEvents" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("calUpcomingWidget", "Events")</label>
+        <div class="col-xs-4">
+            <input class="yesno-checkbox" id="UpcomingEvents" type="checkbox" name="UpcomingEvents" data-size="mini" checked="@Model.UpcomingEvents" value="true" />
+        </div>
+        <div class="col-xs-4">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="MaxRecords" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("calMaxRecords", "Events")</label>
+
+        <div class="col-xs-2">
+            @Html.TextBoxFor(m => m.MaxRecords, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="FirstDayofWeek" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("calFirstDayofWeek", "Events")</label>
+
+        <div class="col-xs-4">
+            @Html.EnumDropDownListFor(m => m.FirstDayofWeek, new { @class = "form-control" }, "")
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="ShowBirthdays" class="checkbox col-xs-3 col-xs-offset-3">@Html.CheckBoxFor(m => m.ShowBirthdays) @ResourceManager.GetLocalisedString("calShowBDays", "Events")</label>
+
+    </div>
+    <div class="form-group">
+        <label for="PublicHolidays" class="checkbox col-xs-3 col-xs-offset-3">@Html.CheckBoxFor(m => m.PublicHolidays) @ResourceManager.GetLocalisedString("calPublicHolidays", "Events")</label>
+        <div class="col-xs-3">
+            @Html.DropDownListFor(model => model.CountryCode, new SelectList(Model.Countries, "CountryCode", "Name"), new { @class = "form-control", id = "eventCountry" })
+        </div>
+        <div class="col-xs-3">
+            <select class="form-control" name="Region" id="countryRegion" style="display: none;">
+                <option value=''>No Regions</option>
+            </select>
+        </div>
+        <span class="col-xs-10 small text-right">Public holiday data supplied by <a href="http://kayaposoft.com/enrico/" title="Enrico Service is a free service written in PHP providing public holidays for several countries" data-toggle="tooltip">Enrico</a></span>
+    </div>
+    if (Config.TableExists("EVENT_SUBSCRIPTIONS"))
+    {
+        <div class="col-xs-12"><h4>Club/Society Events Add On</h4></div>
+        <div class="form-group">
+            <label for="EnableEvents" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("PluginTitle", "Events")</label>
+            <div class="col-xs-4">
+                <input class="yesno-checkbox" id="EnableEvents" type="checkbox" name="EnableEvents" data-size="mini" checked="@Model.EnableEvents" value="true" />
+            </div>
+            <div class="col-xs-4">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ShowInCalendar" class="control-label col-xs-3">@ResourceManager.GetLocalisedString("lblShowInCalendar", "Events")</label>
+            <div class="col-xs-4">
+                <input class="yesno-checkbox" id="ShowInCalendar" type="checkbox" name="ShowInCalendar" data-size="mini" checked="@Model.ShowInCalendar" value="true" />
+            </div>
+            <div class="col-xs-4">
+            </div>
+        </div>
+        <div class="form-group clearfix">
+
+            <label class="control-label col-xs-3">Allowed Roles</label>
+            <div class="col-xs-4">
+                @Html.TextBoxFor(m => m.Roles, new { @class = "form-control" })
+                <label class="small text-muted">restrict access to specific Roles, comma seperated list.</label>
+            </div>
+        </div>
+
+    }
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success col-xs-offset-10">Save</button>
+    </div>
+}
+@if (Config.TableExists("EVENT_SUBSCRIPTIONS"))
+{
+    <div class="panel panel-primary panel-body clearfix">
+        @Html.Action("Admin", "Events")
+    </div>
+}
+
+@using (Html.BeginScripts())
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#eventCountry").change(function () {
+                populateRegions($(this).val());
+            });
+            populateRegions($("#eventCountry").val());
+        });
+        function populateRegions(country) {
+                var subItems="";
+                $.getJSON("@Url.Action("GetRegions","Calendar")", { id: country }, function (data) {
+                    subItems = "";
+                    $.each(data, function (index, item) {
+                        if (item === '@ClassicConfig.GetValue("STRCALREGION")') {
+                            subItems += "<option value='" + item + "' selected>" + item + "</option>";
+                        } else {
+                            subItems += "<option value='" + item + "'>" + item + "</option>";
+                        }
+                    });
+                    if (subItems.length > 1) {
+                        subItems = "<option value=''>Select Region</option>" + subItems;
+                        $("#countryRegion").html(subItems);
+                        $("#countryRegion").show();
+                    } else {
+                        subItems = "<option value=''>No Regions</option>";
+                        $("#countryRegion").html(subItems);
+                        $("#countryRegion").hide();
+                    }
+
+                });
+        }
+    </script>
+}

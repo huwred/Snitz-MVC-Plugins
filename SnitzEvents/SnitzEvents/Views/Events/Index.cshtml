@@ -1,0 +1,181 @@
+﻿@using System.Globalization
+@using System.Web.UI.WebControls
+@using System.Web.Optimization
+@using SnitzMembership;
+@using LangResources.Utility
+@using SnitzConfig
+@using SnitzCore.Utility;
+@using SnitzEvents.Models
+
+@model SnitzEvents.ViewModels.AgendaViewModel
+
+@{
+    CultureInfo ci = SessionData.Get<CultureInfo>("Culture");
+    string clang = ci.TwoLetterISOLanguageName;
+    ViewBag.Title = ClassicConfig.ForumTitle + " | " + ResourceManager.GetLocalisedString("PluginTitle", "Events");
+    string[] rtlLangs = new string[] { "ar", "arc", "dv", "fa", "ha", "khw", "ks", "ku", "ps", "ur", "yi", "he" };
+    string[] arabic = new string[] { "ar", "arc", "dv", "fa", "ha", "khw", "ks", "ku", "ps", "ur" }; //Cairo
+    string[] aramaic = new string[] { "yi", "he" }; //Tinos
+
+    bool isRighToLeft = (rtlLangs.Contains(clang));
+
+    if (!SessionData.Contains("isRighToLeft") || isRighToLeft != SessionData.Get<bool>("isRighToLeft"))
+    {
+        SessionData.Set("isRighToLeft", isRighToLeft);
+    }
+}
+@section styles{
+    @Styles.Render("~/Content/jquery-ui-timepicker-addon.min.css")
+    @Html.Raw(Config.ThemeCss("plugincss/fullcalendar.min.css"))
+    @if (isRighToLeft)
+    {
+        @Styles.Render("~/Content/plugincss/fullcalendar-rtl.css")
+    }
+}
+@section sidebox{
+    <p></p>
+    <div class="panel-group">
+
+        <div class="panel panel-primary side-box hidden-xs">
+            <div class="panel-heading">@ResourceManager.GetLocalisedString("EventCategories", "Events")</div>
+            <div class="panel-body">
+                <a href="@Url.Action("Index",new{id=0,old=0})">@ResourceManager.GetLocalisedString("UpcomingEvents", "Events")</a><span title="Number of events"></span><br />
+                <a href="@Url.Action("Index",new{id=-1,old=ViewBag.OldNew})">@ResourceManager.GetLocalisedString("PastEvents", "Events")</a><span title="Number of events"></span><br />
+                <hr class="title" />
+                @foreach (var cat in ViewBag.CatSummary)
+                {
+                    <a href="@Url.Action("Index",new{id=cat.CatId,old=ViewBag.OldNew})" class="catFilter" data-id="@cat.CatId">@cat.Name (@cat.EventCount)</a><br />
+                }
+            </div>
+        </div>
+        <div class="panel panel-primary side-box hidden-xs">
+            <div class="panel-heading">@ResourceManager.GetLocalisedString("EventFilter", "Events")</div>
+            <div class="panel-body">
+                @*<div class="form-group clearfix">
+                        @Html.DropDownListFor(model => model.CatId, new SelectList(Model.Categories, "Key", "Value"), @ResourceManager.GetLocalisedString("AllCategories", "Events"), new {@class = "form-control", tabindex = 1, id = "cat-filter"})
+                    </div>*@
+                <div class="form-group clearfix">
+                    @Html.DropDownListFor(model => model.ClubId, new SelectList(Model.Clubs, "Key", "Value"), @ResourceManager.GetLocalisedString("AllClubs", "Events"), new { @class = "form-control", tabindex = 1, id = "club-filter", onchange = "filterClub();" })
+                </div>
+                <div class="form-group clearfix">
+                    @Html.DropDownListFor(model => model.LocId, new SelectList(Model.Locations, "Key", "Value"), @ResourceManager.GetLocalisedString("AllLocations", "Events"), new { @class = "form-control", tabindex = 1, id = "loc-filter", onchange = "filterLocation();" })
+                </div>
+                <input type="hidden" value="@ViewBag.OldNew" id="old-new" />
+            </div>
+        </div>
+        @if (WebSecurity.IsAuthenticated)
+        {
+            <div class="panel panel-primary side-box hidden-xs">
+                <div class="panel-heading">@ResourceManager.GetLocalisedString("Other", "Events")</div>
+                <div class="panel-body">
+                    @if (String.IsNullOrWhiteSpace(ClassicConfig.GetValue("STRRESTRICTROLES")))
+                    {
+                        <a href="@Url.Action("AddEditEvent", new {id = 0})">@ResourceManager.GetLocalisedString("AddEvent", "Events")</a>
+                        <br />
+                    }
+                    else if (SnitzMembership.WebSecurity.IsUserInRole(WebSecurity.CurrentUserName, Model.AllowedRoles))
+                    {
+                        <a href="@Url.Action("AddEditEvent", new {id = 0})">@ResourceManager.GetLocalisedString("AddEvent", "Events")</a>
+                        <br />
+                    }
+                    <a href="@Url.Action("EventSubs")">@ResourceManager.GetLocalisedString("MySubs", "Events")</a><br />
+                </div>
+            </div>
+        }
+    </div>
+
+}
+<div class="row-fluid">
+    <input type="hidden" value="@ViewBag.CatFilter" id="cat_filter" />
+    <div id="calendar"></div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var upComingEventsTitle = '[@ResourceManager.GetLocalisedString("upComingEventTitle", "Events")]';
+        var pastEventsTitle = '[@ResourceManager.GetLocalisedString("upPastEventsTitle", "Events")]';
+
+    </script>
+    @Scripts.Render("~/Scripts/moment.min.js")
+    @if (clang == "fa")
+    {
+        @Scripts.Render("~/Scripts/moment-jalaali.min.js")
+    }
+    @*@Scripts.Render("~/Scripts/jquery-ui-timepicker-addon.js")*@
+    @Scripts.Render("~/Scripts/pluginjs/fullcalendar-year.min.js")
+    @Scripts.Render("~/Scripts/lang/" + clang + ".js")
+    @Scripts.Render("~/Scripts/pluginjs/snitz.cal.min.js")
+
+    <script type="text/javascript">
+        $(document)
+            .ready(function () {
+                var filter = $('#cat_filter').val();
+                if (filter === '-1') {
+                    ClubCalendar("@Url.Action("GetClubCalendarEvents",new{id=-1,old=-1 })", 'calendar','@ViewBag.StartDate');
+                } else {
+                    if ($('#old-new').val() === '-1') {
+                        ClubCalendar("@Url.Action("GetClubCalendarEvents",new{id=ViewBag.CatFilter,old=-1})", 'calendar', '@ViewBag.StartDate');
+                    } else {
+                        ClubCalendar("@Url.Action("GetClubCalendarEvents",new{id=ViewBag.CatFilter,old=0})", 'calendar','');
+                    }
+
+                }
+                $('.del-event')
+                    .on('click',
+                        function (e) {
+                            e.preventDefault();
+                            var data = {};
+                            data.id = $(this).data("id");
+
+                            BootstrapDialog.confirm({
+                                title: '@ResourceManager.GetLocalisedString("lblDeleteEvent", "Events")',
+                                message: '@ResourceManager.GetLocalisedString("msgDeleteEvent", "Events")<br/>', callback: function (ok) {
+                                    if (ok) {
+                                        $.ajax({
+                                            url: window.SnitzVars.baseUrl + 'Events/RemoveEvent',
+                                            data: data,
+                                            type: "POST",
+                                            cache: false,
+                                            success: function (response) {
+
+                                                window.location.reload();
+                                            },
+                                            error: function (jqXHR, textStatus, errorThrown) {
+                                                BootstrapDialog.show({
+                                                    type: BootstrapDialog.TYPE_WARNING,
+                                                    title: textStatus,
+                                                    message: jqXHR.responseText
+                                                });
+
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                    });
+
+                @*$('#cat-filter')
+                    .change(function() {
+                            alert('changed');
+                            //$(this).parent('form').submit();
+                            if ($('#old-new').val() === '-1') {
+                                ClubCalendar("@Url.Action("GetClubCalendarEvents",new{id=ViewBag.CatFilter,old=-1})", 'calendar', "@ViewBag.StartDate");
+                            } else {
+                                ClubCalendar("@Url.Action("GetClubCalendarEvents",new{id=ViewBag.CatFilter,old=0})", 'calendar','');
+                            }
+                        });*@
+            });
+        function filterClub() {
+            alert($('#club-filter option:selected').text());
+            $("li[data-club!='" + $('#club-filter option:selected').text() + "']").hide();
+            $("li[data-club='" + $('#club-filter option:selected').text() + "']").show();
+            $(".dropdown").show();
+        }
+        function filterLocation() {
+            alert($('#loc-filter option:selected').val());
+            $("li[data-loc!='" + $('#loc-filter option:selected').text() + "']").hide();
+            $("li[data-loc='" + $('#loc-filter option:selected').text() + "']").show();
+            $(".dropdown").show();
+        }
+
+    </script>
+}

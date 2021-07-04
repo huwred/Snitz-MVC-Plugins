@@ -1,0 +1,34 @@
+﻿@using SnitzEvents.Views.Helpers;
+@using SnitzConfig;
+@using SnitzDataModel
+@using LangResources.Utility;
+
+@model SnitzEvents.ViewModels.SubscribeModel
+
+<h5>@ResourceManager.GetLocalisedString("EventSubs", "Events")</h5>
+<hr class="title" />
+@using (Html.BeginForm("EventSubs"))
+{
+    <div class="container-fluid">
+        <p>@ResourceManager.GetLocalisedString("SubsDesc", "Events")</p>
+        @Html.CheckBoxList("SelectedSources", Model.SubscriptionSources, Model.SelectedSources.ToList(), null)
+        <label><input type="checkbox" id="checkAll" />@ResourceManager.GetLocalisedString("lblSelectAll", "labels")</label>
+        <div class="form-group col-xs-9 padding-md pull-right">
+            <input type="button" value="@ResourceManager.GetLocalisedString("btnCancel", "labels")" class="btn btn-sm btn-warning cancel"/>
+            <input type="reset" value="@ResourceManager.GetLocalisedString("btnReset", "labels")" class="btn btn-sm btn-primary"/>
+            <input type="submit" value="@ResourceManager.GetLocalisedString("btnSave", "labels")" class="btn btn-sm btn-success"/>
+        </div>
+    </div>
+}
+@section scripts{
+    <script>
+        $('body').on('change', '#checkAll', function () {
+            var checkboxes = $(this).closest('form').find(':checkbox');
+            if ($(this).is(':checked')) {
+                checkboxes.prop('checked', true);
+            } else {
+                checkboxes.prop('checked', false);
+            }
+        });
+    </script>
+}

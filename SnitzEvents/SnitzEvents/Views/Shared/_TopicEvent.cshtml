@@ -1,0 +1,27 @@
+﻿
+
+@using LangResources.Utility
+@model SnitzEvents.Models.CalendarEventItem
+
+@using (Html.BeginForm("SaveEvent", "Calendar", FormMethod.Post, new { @class = "form", id = "cal-addTopicEvent" }))
+    {
+<div class="panel panel-primary">
+    <div class="panel-heading">@ResourceManager.GetLocalisedString("TopicEventTitle", "Events")</div>
+    <div class="panel-body">
+        @Html.EditorForModel()
+        @if (Model.TopicId > 0)
+        {
+        <div class="form-group">
+            <select>
+                <option value="1">@ResourceManager.GetLocalisedString("ThisDate", "Events")</option>
+                <option value="2">@ResourceManager.GetLocalisedString("AllDates", "Events")</option>
+                <option value="3">@ResourceManager.GetLocalisedString("FutureDates", "Events")</option>
+            </select>
+        </div>
+        <div class="form-group"><button class="btn btn-info">@ResourceManager.GetLocalisedString("ProcessDates", "Events")</button></div>
+        }
+    </div>
+</div>
+    }
+
+

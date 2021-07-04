@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tables title="Forum Calendar MOD" applied="false">
+  <Create>
+    <Table name="CAL_EVENTS" idfield="C_ID">
+      <Column name="TOPIC_ID" type="int" allownulls="true" />
+      <Column name="CAT_ID" type="int" allownulls="true" />
+      <Column name="CLUB_ID" type="int" allownulls="true" />
+      <Column name="LOC_ID" type="int" allownulls="true" />
+      <Column name="AUTHOR_ID" type="int" allownulls="true" />
+      <Column name="DATE_ADDED" type="varchar" size="14" allownulls="true" />
+      <Column name="EVENT_TITLE" type="varchar" size="90" allownulls="true" />
+      <Column name="EVENT_DETAILS" type="text" size="MAX" allownulls="true" />	 
+      <Column name="EVENT_DATE" type="varchar" size="50" allownulls="false" />
+      <Column name="EVENT_ENDDATE" type="varchar" size="50" allownulls="true" />
+      <Column name="EVENT_ALLDAY" type="smallint" default="0" allownulls="false" />
+      <Column name="EVENT_RECURS" type="int" default="0" allownulls="false" />
+      <Column name="EVENT_DAYS" type="varchar" size="20" allownulls="true" />	  
+    </Table>
+    <Table name="EVENT_CAT" idfield="CAT_ID">
+      <Column name="CAT_NAME" type="varchar" size="50" allownulls="false" />
+      <Column name="CAT_ORDER" type="int" default="0" allownulls="false" />
+    </Table>
+    <Table name="EVENT_CLUB" idfield="CLUB_ID">
+      <Column name="CLUB_L_NAME" type="varchar" size="100" allownulls="false" />
+      <Column name="CLUB_S_NAME" type="varchar" size="50" allownulls="true" />
+      <Column name="CLUB_DEF_LOC" type="int" allownulls="true" />
+      <Column name="CLUB_ORDER" type="int" default="0" allownulls="false" />
+      <Column name="CLUB_ABBR" type="varchar" size="5" allownulls="true" />
+    </Table>
+    <Table name="EVENT_LOCATION" idfield="LOC_ID">
+      <Column name="LOC_NAME" type="varchar" size="50" allownulls="false" />
+      <Column name="LOC_ORDER" type="int" default="0" allownulls="false" />
+    </Table>
+    <Table name="EVENT_SUBSCRIPTIONS" idfield="SUB_ID">
+    <Column name="CLUB_ID" type="int" allownulls="false" />
+    <Column name="MEMBER_ID" type="int" allownulls="false" />  
+  </Table>
+  </Create>
+    <Alter>
+    <Table name="FORUM_FORUM">
+      <Column action="ADD" name="F_ALLOWEVENTS" type="int" default="0" allownulls="false" />
+    </Table>
+  </Alter>
+</Tables>

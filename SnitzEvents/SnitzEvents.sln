@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnitzEvents", "SnitzEvents\SnitzEvents.csproj", "{FF109077-2E26-485D-B8BB-5F677CD41BC2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF109077-2E26-485D-B8BB-5F677CD41BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF109077-2E26-485D-B8BB-5F677CD41BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF109077-2E26-485D-B8BB-5F677CD41BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF109077-2E26-485D-B8BB-5F677CD41BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6AD88615-A0AE-4BEB-85F6-DD06C6F87762}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://snitzforums.visualstudio.com/
+		SccProjectUniqueName0 = SnitzEvents\\SnitzEvents.csproj
+		SccProjectName0 = SnitzEvents
+		SccLocalPath0 = SnitzEvents
+		SccLocalPath1 = .
+	EndGlobalSection
+EndGlobal
