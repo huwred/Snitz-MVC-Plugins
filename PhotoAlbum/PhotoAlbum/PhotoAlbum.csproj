@@ -63,8 +63,8 @@
       <HintPath>..\..\Snitz-DLL\LangResources.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\Dependency\log4net.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\log4net.2.0.12\lib\net45\log4net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>False</Private>
