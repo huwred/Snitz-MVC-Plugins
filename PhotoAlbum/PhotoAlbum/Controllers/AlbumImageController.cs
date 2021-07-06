@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Mvc;
 using log4net;
 using PhotoAlbum.Models;
 
@@ -14,7 +15,7 @@ namespace PhotoAlbum.Controllers
         //[KeyAuthorize]
         [Route("api/albumimage")]
         [System.Web.Http.AcceptVerbs("GET","POST")]
-        [HttpPost]
+        [System.Web.Http.HttpPost]
         public HttpResponseMessage Post([FromBody] PostedImage image)
         {
             var logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

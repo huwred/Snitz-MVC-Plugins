@@ -62,11 +62,11 @@
     </Reference>
     <Reference Include="BbCodeFormatter, Version=1.0.7841.37581, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Snitz-DLL\BbCodeFormatter.dll</HintPath>
+      <HintPath>..\..\..\SnitzDev\Snitz MVC\Plugins\Snitz-DLL\BbCodeFormatter.dll</HintPath>
     </Reference>
     <Reference Include="LangResources, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Snitz-DLL\LangResources.dll</HintPath>
+      <HintPath>..\..\..\SnitzDev\Snitz MVC\Plugins\Snitz-DLL\LangResources.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp">
       <Private>False</Private>
@@ -81,19 +81,19 @@
     </Reference>
     <Reference Include="Snitz.Base, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Snitz-DLL\Snitz.Base.dll</HintPath>
+      <HintPath>..\..\..\SnitzDev\Snitz MVC\Plugins\Snitz-DLL\Snitz.Base.dll</HintPath>
     </Reference>
     <Reference Include="SnitzCore, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Snitz-DLL\SnitzCore.dll</HintPath>
+      <HintPath>..\..\..\SnitzDev\Snitz MVC\Plugins\Snitz-DLL\SnitzCore.dll</HintPath>
     </Reference>
     <Reference Include="SnitzDataModel, Version=1.0.7841.37580, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Snitz-DLL\SnitzDataModel.dll</HintPath>
+      <HintPath>..\..\..\SnitzDev\Snitz MVC\Plugins\Snitz-DLL\SnitzDataModel.dll</HintPath>
     </Reference>
     <Reference Include="SnitzMembership, Version=1.0.7841.37581, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Snitz-DLL\SnitzMembership.dll</HintPath>
+      <HintPath>..\..\..\SnitzDev\Snitz MVC\Plugins\Snitz-DLL\SnitzMembership.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
